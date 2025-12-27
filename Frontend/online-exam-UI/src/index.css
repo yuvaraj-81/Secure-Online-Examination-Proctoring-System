@@ -1,0 +1,176 @@
+:root {
+  /* ================= TYPOGRAPHY ================= */
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  /* ================= COLORS ================= */
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  /* ================= RENDERING ================= */
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* ================= UI TOKENS ================= */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  --transition-fast: 0.15s ease;
+  --transition-med: 0.25s ease;
+}
+
+/* ================= RESET & BASE ================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", system-ui;
+  margin: 0;
+  min-height: 100vh;
+  background-color: inherit;
+  color: inherit;
+}
+
+/* ================= LINKS ================= */
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: #535bf2;
+}
+
+/* ================= HEADINGS ================= */
+
+h1 {
+  font-size: clamp(2rem, 4vw, 3.2em);
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+}
+
+h3 {
+  font-size: 1.2rem;
+}
+
+/* ================= BUTTONS ================= */
+
+button {
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+
+  font-size: 0.95rem;
+  font-weight: 500;
+  font-family: inherit;
+
+  background-color: #1a1a1a;
+  color: inherit;
+
+  cursor: pointer;
+  transition:
+    background-color var(--transition-med),
+    border-color var(--transition-med),
+    transform var(--transition-fast);
+}
+
+button:hover {
+  border-color: #646cff;
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+button:focus,
+button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.35);
+}
+
+/* ================= INPUTS (GLOBAL BASE) ================= */
+
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 0.95rem;
+  border-radius: var(--radius-sm);
+  outline: none;
+}
+
+/* ================= SCROLLBAR (SUBTLE) ================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* ================= LIGHT MODE ================= */
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+
+  a:hover {
+    color: #747bff;
+  }
+
+  button {
+    background-color: #f9f9f9;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* ================= RESPONSIVE TWEAKS ================= */
+
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+
+  button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+  }
+}
+

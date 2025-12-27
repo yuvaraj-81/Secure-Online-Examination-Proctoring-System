@@ -1,0 +1,339 @@
+/* =====================================================
+   RESULTS PAGE — ENTERPRISE EXAM UX (SCREENSHOT LOCK)
+===================================================== */
+
+/* ================= PAGE TITLE ================= */
+.student-main h3 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 18px;
+  letter-spacing: -0.02em;
+}
+
+/* ================= SUMMARY ================= */
+.results-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  margin: 24px 0 32px;
+}
+
+.summary-card {
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.95),
+    rgba(2, 6, 23, 0.95)
+  );
+  border: 1px solid #1e293b;
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.summary-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.65);
+}
+
+.summary-card span {
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+.summary-card strong {
+  display: block;
+  margin-top: 10px;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+/* Accent borders */
+.summary-card.success {
+  border-color: rgba(34, 197, 94, 0.5);
+}
+
+.summary-card.info {
+  border-color: rgba(37, 99, 235, 0.5);
+}
+
+/* ================= RESULTS GRID ================= */
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* 🔑 */
+  gap: 22px;
+}
+
+/* ================= RESULT CARD ================= */
+.result-card {
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.96),
+    rgba(2, 6, 23, 0.96)
+  );
+  border: 1px solid #1e293b;
+  border-radius: 18px;
+  padding: 20px;
+
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.6);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.result-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.7);
+}
+
+/* ================= RESULT HEADER ================= */
+.result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.result-header strong {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* ================= STATUS BADGE ================= */
+.status {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.status.pass {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+.status.fail {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+/* ================= SCORE BAR ================= */
+.progress {
+  height: 8px;
+  background: #1e293b;
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 10px 0;
+}
+
+.progress-bar {
+  height: 100%;
+}
+
+.progress-bar.pass {
+  background: linear-gradient(90deg, #22c55e, #4ade80);
+}
+
+.progress-bar.fail {
+  background: linear-gradient(90deg, #ef4444, #f87171);
+}
+
+/* ================= META ================= */
+.meta {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-top: 4px;
+}
+
+/* ================= ACTIONS ================= */
+.result-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.view-btn {
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #e5e7eb;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  min-width: 120px;
+
+  transition: background 0.15s ease, transform 0.12s ease;
+}
+
+.view-btn:hover {
+  background: #334155;
+  transform: translateY(-1px);
+}
+
+/* =====================================================
+   MODAL SYSTEM — STABLE & SCROLL SAFE
+===================================================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background: linear-gradient(180deg, #020617, #010314);
+  color: #e5e7eb;
+  border-radius: 18px;
+
+  width: 94%;
+  max-width: 760px;
+  max-height: 88vh;
+
+  display: flex;
+  flex-direction: column;
+
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.75);
+}
+
+.modal-header {
+  position: sticky;
+  top: 0;
+  background: #020617;
+  padding: 18px 22px;
+  border-bottom: 1px solid #1e293b;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h4 {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.close-btn {
+  background: #1e293b;
+  color: #e5e7eb;
+  border: none;
+  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  background: #334155;
+}
+
+.modal-body {
+  flex: 1;
+  padding: 22px 24px;
+  overflow-y: auto;
+}
+
+/* ================= REVIEW ================= */
+.review-question {
+  margin-bottom: 26px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #1e293b;
+}
+
+.review-question strong {
+  display: block;
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+
+.review-options {
+  list-style: none;
+  padding: 0;
+}
+
+.review-options li {
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+/* Correct */
+.review-options li.correct {
+  background: rgba(34, 197, 94, 0.18);
+  color: #22c55e;
+  box-shadow: inset 0 0 0 1px rgba(34, 197, 94, 0.4);
+  font-weight: 600;
+}
+
+/* Wrong — red text only */
+.review-options li.wrong {
+  background: transparent;
+  color: #ef4444;
+  font-weight: 500;
+}
+
+/* =====================================================
+   LIGHT MODE — CLEAN WHITE (NO DARK BLEED)
+===================================================== */
+
+.light .summary-card,
+.light .result-card {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
+}
+
+.light .result-header strong,
+.light .meta {
+  color: #0f172a;
+}
+
+.light .progress {
+  background: #e5e7eb;
+}
+
+.light .view-btn {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+.light .view-btn:hover {
+  background: #e2e8f0;
+}
+
+.light .status.pass {
+  background: #ecfdf5;
+  color: #15803d;
+}
+
+.light .status.fail {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.light .modal {
+  background: #ffffff;
+  color: #0f172a;
+}
+
+.light .modal-header {
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.light .review-question {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.light .review-options li.wrong {
+  color: #dc2626;
+}

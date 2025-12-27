@@ -1,0 +1,267 @@
+/* ================= ROOT ================= */
+
+.admin-page {
+  padding: 28px;
+}
+
+/* ================= HEADER ================= */
+
+.students-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 26px;
+}
+
+.students-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.back-btn {
+  background: transparent;
+  border: none;
+  color: #6366f1;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.back-btn:hover {
+  text-decoration: underline;
+}
+
+/* ================= FORM CARD ================= */
+
+.question-form {
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.95),
+    rgba(2, 6, 23, 0.95)
+  );
+  border: 1px solid #1e293b;
+  border-radius: 18px;
+  padding: 22px;
+  margin-bottom: 36px;
+
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+
+  box-shadow:
+    0 14px 45px rgba(0, 0, 0, 0.45);
+}
+
+/* Full width fields */
+.question-form .full {
+  grid-column: span 2;
+}
+
+/* ================= INPUTS ================= */
+
+.question-form input,
+.question-form textarea {
+  background: #020617;
+  border: 1px solid #1e293b;
+  color: #e5e7eb;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.question-form textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.question-form input:focus,
+.question-form textarea:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25);
+}
+
+/* ================= ADD BUTTON ================= */
+
+.question-form .primary {
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  padding: 12px;
+  border-radius: 999px;
+  cursor: pointer;
+
+  box-shadow:
+    0 10px 30px rgba(99, 102, 241, 0.45);
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.2s ease;
+}
+
+.question-form .primary:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 14px 40px rgba(99, 102, 241, 0.6);
+}
+
+.question-form .primary:disabled {
+  background: #475569;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* ================= QUESTION LIST ================= */
+
+.question-list {
+  display: grid;
+  gap: 20px;
+}
+
+/* ================= QUESTION CARD ================= */
+
+.question-card {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(15, 23, 42, 0.9),
+      rgba(2, 6, 23, 0.9)
+    );
+  border: 1px solid #1e293b;
+  border-radius: 18px;
+  padding: 22px;
+
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.4);
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.question-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(99, 102, 241, 0.45);
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.55);
+}
+
+/* Question text */
+.question-card strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 14px;
+  line-height: 1.6;
+}
+
+/* ================= OPTIONS ================= */
+
+.question-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 14px;
+}
+
+.question-card li {
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  border-radius: 10px;
+  background: rgba(148, 163, 184, 0.06);
+  font-size: 14px;
+}
+
+/* ================= CORRECT BADGE ================= */
+
+.correct {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 6px 14px;
+  border-radius: 999px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(34, 197, 94, 0.35);
+
+  margin-bottom: 14px;
+}
+
+/* ================= DELETE ================= */
+
+.danger {
+  background: transparent;
+  border: 1px solid #ef4444;
+  color: #ef4444;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-weight: 500;
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+}
+
+.danger:hover {
+  background: rgba(239, 68, 68, 0.12);
+  transform: translateY(-1px);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+  .question-form {
+    grid-template-columns: 1fr;
+  }
+
+  .question-form .full {
+    grid-column: span 1;
+  }
+
+  .students-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ================= LIGHT MODE ================= */
+
+.admin.light .question-form,
+.admin.light .question-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.06);
+}
+
+.admin.light .question-form input,
+.admin.light .question-form textarea {
+  background: #f9fafb;
+  border: 1px solid #d1d5db;
+  color: #111827;
+}
+
+.admin.light .question-card li {
+  background: #f3f4f6;
+}
+
+.admin.light .correct {
+  background: #ecfdf5;
+  color: #15803d;
+}

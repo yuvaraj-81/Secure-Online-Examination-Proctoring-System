@@ -1,0 +1,151 @@
+/* ================= KPI GRID ================= */
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 22px;
+  margin-top: 24px;
+}
+
+/* ================= KPI CARD ================= */
+
+.kpi-card {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(15, 23, 42, 0.92),
+      rgba(2, 6, 23, 0.95)
+    );
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 18px;
+  padding: 24px;
+
+  box-shadow:
+    0 14px 38px rgba(0, 0, 0, 0.45);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.25s ease,
+    border-color 0.2s ease;
+}
+
+.kpi-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(99, 102, 241, 0.5);
+  box-shadow:
+    0 22px 55px rgba(99, 102, 241, 0.35);
+}
+
+/* ================= KPI TEXT ================= */
+
+.kpi-title {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.kpi-value {
+  font-size: 30px;
+  font-weight: 700;
+  color: #e5e7eb;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+/* ================= CHART GRID ================= */
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 28px;
+  margin-top: 42px;
+}
+
+/* ================= CHART CARD ================= */
+
+.chart-card {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(15, 23, 42, 0.95),
+      rgba(2, 6, 23, 0.98)
+    );
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  padding: 24px;
+  border-radius: 20px;
+
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.6);
+}
+
+.chart-card h4 {
+  margin-bottom: 16px;
+  color: #e5e7eb;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.chart-card.full {
+  grid-column: span 2;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+  .kpi-grid {
+    gap: 18px;
+  }
+
+  .kpi-card {
+    padding: 20px;
+  }
+
+  .kpi-value {
+    font-size: 26px;
+  }
+
+  .chart-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-card.full {
+    grid-column: span 1;
+  }
+}
+
+/* ================= LIGHT MODE SUPPORT ================= */
+
+.admin.light .kpi-card {
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #f8fafc
+    );
+  border: 1px solid #e5e7eb;
+  box-shadow:
+    0 14px 35px rgba(0, 0, 0, 0.08);
+}
+
+.admin.light .kpi-title {
+  color: #6b7280;
+}
+
+.admin.light .kpi-value {
+  color: #0f172a;
+}
+
+.admin.light .chart-card {
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #f8fafc
+    );
+  border: 1px solid #e5e7eb;
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.1);
+}

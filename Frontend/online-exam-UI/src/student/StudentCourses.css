@@ -1,0 +1,162 @@
+/* =====================================================
+   STUDENT COURSES — ADMIN PARITY LAYER
+===================================================== */
+
+/* Wrapper */
+.student-courses {
+  max-width: 920px;
+  margin-inline: auto;
+}
+
+/* ================= TITLE ================= */
+
+.student-courses h3 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 18px;
+  letter-spacing: -0.015em;
+}
+
+/* ================= COURSE LIST ================= */
+
+.student-courses .card-list {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ================= COURSE CARD ================= */
+
+.student-courses .card-item {
+  position: relative;
+
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.95),
+    rgba(2, 6, 23, 0.95)
+  );
+
+  border: 1px solid #1e293b;
+  border-radius: 16px;
+  padding: 18px 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.25s ease,
+    border-color 0.2s ease;
+}
+
+/* Admin-style left accent */
+.student-courses .card-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 12%;
+  height: 76%;
+  width: 4px;
+  border-radius: 999px;
+  background: transparent;
+  transition: background 0.25s ease;
+}
+
+/* Hover / focus */
+.student-courses .card-item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(99, 102, 241, 0.5);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.6);
+}
+
+.student-courses .card-item:hover::before {
+  background: linear-gradient(
+    180deg,
+    #6366f1,
+    #3b82f6
+  );
+}
+
+/* ================= TEXT ================= */
+
+.student-courses .card-item strong {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.student-courses .muted {
+  font-size: 13px;
+  margin-top: 4px;
+  color: #9ca3af;
+}
+
+/* ================= EMPTY STATE ================= */
+
+.student-courses .empty-state {
+  margin-top: 48px;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+/* ================= SKELETON ================= */
+
+.student-courses .skeleton {
+  border-radius: 14px;
+}
+
+/* ================= LIGHT MODE ================= */
+
+.light .student-courses .card-item {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
+}
+
+.light .student-courses .card-item:hover {
+  border-color: #6366f1;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.12);
+}
+
+.light .student-courses .card-item::before {
+  background: transparent;
+}
+
+.light .student-courses .card-item:hover::before {
+  background: linear-gradient(
+    180deg,
+    #6366f1,
+    #3b82f6
+  );
+}
+
+.light .student-courses .muted {
+  color: #6b7280;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+  .student-courses {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .student-courses h3 {
+    font-size: 20px;
+  }
+
+  .student-courses .card-item {
+    padding: 16px 16px;
+  }
+
+  .student-courses .card-item strong {
+    font-size: 14px;
+  }
+}

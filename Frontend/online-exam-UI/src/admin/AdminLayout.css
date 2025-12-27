@@ -1,0 +1,248 @@
+/* ================= ROOT ================= */
+
+.admin {
+  display: flex;
+  min-height: 100vh;
+  background: #0b1220;
+  color: #e5e7eb;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar {
+  width: 230px;
+  background: linear-gradient(180deg, #020617, #020617cc);
+  padding: 22px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  border-right: 1px solid #1e293b;
+}
+
+.sidebar-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  margin-bottom: 6px;
+}
+
+/* ================= NAV ================= */
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sidebar button {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  padding: 11px 14px;
+  border-radius: 10px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.sidebar button:hover {
+  background: rgba(99, 102, 241, 0.15);
+  color: #e0e7ff;
+  transform: translateX(2px);
+}
+
+.sidebar button.active {
+  background: linear-gradient(
+    90deg,
+    rgba(99, 102, 241, 0.35),
+    rgba(99, 102, 241, 0.05)
+  );
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* ================= LOGOUT ================= */
+
+.logout {
+  margin-top: auto;
+  border: 1px solid #ef4444 !important;
+  color: #ef4444 !important;
+}
+
+.logout:hover {
+  background: rgba(239, 68, 68, 0.15);
+  transform: none;
+}
+
+/* ================= MAIN CONTENT ================= */
+
+.content {
+  flex: 1;
+  padding: 28px;
+  background: radial-gradient(
+    1200px 600px at top center,
+    #020617 0%,
+    #020617 55%,
+    #010314 100%
+  );
+}
+
+/* ================= TOP BAR ================= */
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e293b;
+}
+
+.role-badge {
+  background: linear-gradient(135deg, #6366f1, #818cf8);
+  color: white;
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+}
+
+.mode-toggle {
+  background: #1e293b;
+  border: 1px solid #334155;
+  color: #e5e7eb;
+  padding: 7px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: border 0.2s ease, background 0.2s ease;
+}
+
+.mode-toggle:hover {
+  border-color: #6366f1;
+  background: #243047;
+}
+
+/* ================= DASHBOARD / STAT CARDS ================= */
+
+.stat-card,
+.dashboard-card {
+  background: radial-gradient(
+    circle at top,
+    rgba(99, 102, 241, 0.18),
+    #020617
+  );
+  border: 1px solid #1e293b;
+  border-radius: 16px;
+  padding: 20px;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.stat-card:hover,
+.dashboard-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(99, 102, 241, 0.5);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 900px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .content {
+    padding: 22px;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .sidebar button {
+    padding: 9px 12px;
+    font-size: 13px;
+  }
+
+  .logout {
+    margin-top: 0;
+  }
+
+  .content {
+    padding: 20px 16px;
+  }
+}
+
+/* ================= LIGHT MODE ================= */
+
+.admin.light {
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.admin.light .sidebar {
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
+}
+
+.admin.light .sidebar button {
+  color: #334155;
+}
+
+.admin.light .sidebar button:hover {
+  background: rgba(99, 102, 241, 0.12);
+  color: #1e3a8a;
+}
+
+.admin.light .sidebar button.active {
+  background: rgba(99, 102, 241, 0.15);
+  color: #1e3a8a;
+}
+
+.admin.light .content {
+  background: #f8fafc;
+}
+
+.admin.light .topbar {
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.admin.light .mode-toggle {
+  background: #ffffff;
+  color: #0f172a;
+  border: 1px solid #cbd5f5;
+}
+
+.admin.light .stat-card,
+.admin.light .dashboard-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+}
