@@ -1,5 +1,5 @@
 /* =====================================================
-   STUDENT PROFILE — ADMIN PARITY
+   STUDENT PROFILE — ADMIN PARITY (FIXED THEME SCOPE)
 ===================================================== */
 
 .student-profile {
@@ -20,7 +20,7 @@
 
   border: 1px solid #1e293b;
   border-radius: 18px;
-  padding: 28px;
+  padding: clamp(22px, 3vw, 28px);
 
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
 }
@@ -92,7 +92,7 @@
 }
 
 /* =====================================================
-   ROLE BADGE (SAFE)
+   ROLE BADGE
 ===================================================== */
 
 .profile-item .value.role {
@@ -117,24 +117,24 @@
 }
 
 /* =====================================================
-   LIGHT MODE
+   ✅ LIGHT MODE — FIXED & SCOPED
 ===================================================== */
 
-.light .profile-card {
+.student-layout.light .profile-card {
   background: #ffffff;
   border: 1px solid #e5e7eb;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
 }
 
-.light .profile-item .label {
+.student-layout.light .profile-item .label {
   color: #6b7280;
 }
 
-.light .profile-item .value {
+.student-layout.light .profile-item .value {
   color: #0f172a;
 }
 
-.light .profile-item .value.role {
+.student-layout.light .profile-item .value.role {
   background: linear-gradient(
     135deg,
     #eef2ff,
@@ -156,5 +156,9 @@
 
   .profile-item .label {
     font-size: 11px;
+  }
+
+  .profile-header {
+    font-size: 18px;
   }
 }

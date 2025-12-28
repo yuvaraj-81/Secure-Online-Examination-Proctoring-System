@@ -1,5 +1,5 @@
 /* =====================================================
-   STUDENT COURSES — ADMIN PARITY LAYER
+   STUDENT COURSES — ADMIN PARITY LAYER (FIXED)
 ===================================================== */
 
 /* Wrapper */
@@ -66,7 +66,7 @@
   transition: background 0.25s ease;
 }
 
-/* Hover / focus */
+/* Hover presence */
 .student-courses .card-item:hover {
   transform: translateY(-2px);
   border-color: rgba(99, 102, 241, 0.5);
@@ -87,6 +87,7 @@
   font-size: 15px;
   font-weight: 600;
   letter-spacing: -0.01em;
+  color: inherit;
 }
 
 .student-courses .muted {
@@ -110,24 +111,26 @@
   border-radius: 14px;
 }
 
-/* ================= LIGHT MODE ================= */
+/* =====================================================
+   ✅ LIGHT MODE — MATCH StudentLayout EXACTLY
+===================================================== */
 
-.light .student-courses .card-item {
+.student-layout.light .student-courses .card-item {
   background: #ffffff;
   border: 1px solid #e5e7eb;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.08);
 }
 
-.light .student-courses .card-item:hover {
+.student-layout.light .student-courses .card-item:hover {
   border-color: #6366f1;
-  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.12);
 }
 
-.light .student-courses .card-item::before {
+.student-layout.light .student-courses .card-item::before {
   background: transparent;
 }
 
-.light .student-courses .card-item:hover::before {
+.student-layout.light .student-courses .card-item:hover::before {
   background: linear-gradient(
     180deg,
     #6366f1,
@@ -135,7 +138,11 @@
   );
 }
 
-.light .student-courses .muted {
+.student-layout.light .student-courses .card-item strong {
+  color: #0f172a;
+}
+
+.student-layout.light .student-courses .muted {
   color: #6b7280;
 }
 
@@ -153,7 +160,7 @@
   }
 
   .student-courses .card-item {
-    padding: 16px 16px;
+    padding: 16px;
   }
 
   .student-courses .card-item strong {

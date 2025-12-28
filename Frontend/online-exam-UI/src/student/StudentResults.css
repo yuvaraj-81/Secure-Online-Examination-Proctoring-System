@@ -1,5 +1,5 @@
 /* =====================================================
-   RESULTS PAGE — ENTERPRISE EXAM UX (SCREENSHOT LOCK)
+   RESULTS PAGE — ENTERPRISE EXAM UX (FIXED THEME SCOPE)
 ===================================================== */
 
 /* ================= PAGE TITLE ================= */
@@ -62,7 +62,7 @@
 /* ================= RESULTS GRID ================= */
 .results-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); /* 🔑 */
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 22px;
 }
 
@@ -173,7 +173,7 @@
 }
 
 /* =====================================================
-   MODAL SYSTEM — STABLE & SCROLL SAFE
+   MODAL SYSTEM
 ===================================================== */
 
 .modal-overlay {
@@ -273,7 +273,7 @@
   font-weight: 600;
 }
 
-/* Wrong — red text only */
+/* Wrong */
 .review-options li.wrong {
   background: transparent;
   color: #ef4444;
@@ -281,59 +281,63 @@
 }
 
 /* =====================================================
-   LIGHT MODE — CLEAN WHITE (NO DARK BLEED)
+   ✅ LIGHT MODE — FIXED & SCOPED
 ===================================================== */
 
-.light .summary-card,
-.light .result-card {
-  background: #ffffff !important;
+.student-layout.light .summary-card,
+.student-layout.light .result-card {
+  background: #ffffff;
   border: 1px solid #e5e7eb;
   box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
 }
 
-.light .result-header strong,
-.light .meta {
+.student-layout.light .summary-card span,
+.student-layout.light .meta {
+  color: #6b7280;
+}
+
+.student-layout.light .result-header strong {
   color: #0f172a;
 }
 
-.light .progress {
+.student-layout.light .progress {
   background: #e5e7eb;
 }
 
-.light .view-btn {
+.student-layout.light .view-btn {
   background: #f1f5f9;
   border-color: #cbd5e1;
   color: #0f172a;
 }
 
-.light .view-btn:hover {
+.student-layout.light .view-btn:hover {
   background: #e2e8f0;
 }
 
-.light .status.pass {
+.student-layout.light .status.pass {
   background: #ecfdf5;
   color: #15803d;
 }
 
-.light .status.fail {
+.student-layout.light .status.fail {
   background: #fef2f2;
   color: #b91c1c;
 }
 
-.light .modal {
+.student-layout.light .modal {
   background: #ffffff;
   color: #0f172a;
 }
 
-.light .modal-header {
+.student-layout.light .modal-header {
   background: #ffffff;
   border-bottom: 1px solid #e5e7eb;
 }
 
-.light .review-question {
+.student-layout.light .review-question {
   border-bottom: 1px solid #e5e7eb;
 }
 
-.light .review-options li.wrong {
+.student-layout.light .review-options li.wrong {
   color: #dc2626;
 }

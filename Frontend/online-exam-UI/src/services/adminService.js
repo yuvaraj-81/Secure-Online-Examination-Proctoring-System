@@ -89,3 +89,14 @@ export const getMyResults = () =>
 
 export const getMyProfile = () =>
   api.get("/student/profile");
+
+export const importQuestionsPdf = (examId, file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  return api.post(
+    `/admin/exams/${examId}/questions/import-pdf`,
+    formData,
+    { headers: { "Content-Type": "multipart/form-data" } }
+  );
+};

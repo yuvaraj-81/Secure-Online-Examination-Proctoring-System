@@ -1,5 +1,8 @@
 import api from "./api";
 
+export const getStudentDashboard = () =>
+  api.get("/student/dashboard/summary");
+
 export const getMyProfile = () => {
   return api.get("/student/profile");
 };
@@ -33,3 +36,9 @@ export const getResultReview = (resultId) =>
 
 export const getResultSummary = () =>
   api.get("/student/results/summary");
+
+export const downloadResultPdf = (resultId) =>
+  api.get(`/student/results/${resultId}/pdf`, {
+    responseType: "blob"
+  });
+

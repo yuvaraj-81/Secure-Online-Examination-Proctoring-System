@@ -28,7 +28,7 @@ const StudentProfile = () => {
   return (
     <div className="student-profile">
       <div className="content-card profile-card">
-        <h3>👤 Profile</h3>
+        <h3> Profile</h3>
 
         <div className="profile-grid">
           <div className="profile-item">

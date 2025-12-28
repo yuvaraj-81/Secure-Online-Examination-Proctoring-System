@@ -1,0 +1,351 @@
+/* =====================================================
+   ROOT LAYOUT
+===================================================== */
+
+.student-layout {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+
+  font-family: "Inter", system-ui, sans-serif;
+
+  background: #020617;
+  color: #e5e7eb;
+}
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+.student-sidebar {
+  width: 260px;
+  min-width: 260px;
+
+  display: flex;
+  flex-direction: column;
+  padding: 20px 14px;
+
+  background: linear-gradient(180deg, #0b1220, #020617);
+  box-shadow:
+    inset -1px 0 0 rgba(255,255,255,0.04),
+    6px 0 24px rgba(0,0,0,0.45);
+
+  z-index: 20;
+}
+
+/* =====================================================
+   BRAND
+===================================================== */
+
+.brand {
+  padding: 0 8px;
+  margin-bottom: 22px;
+}
+
+.brand h2 {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.brand .subtitle {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* =====================================================
+   MENU
+===================================================== */
+
+.menu {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.menu button {
+  all: unset;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 11px 14px;
+  border-radius: 10px;
+
+  font-size: 14px;
+  font-weight: 500;
+  color: #cbd5f5;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.menu button:hover {
+  background: rgba(37, 99, 235, 0.14);
+  color: #fff;
+}
+
+.menu button.active {
+  background: linear-gradient(
+    135deg,
+    rgba(37,99,235,0.95),
+    rgba(59,130,246,0.95)
+  );
+  color: #fff;
+  box-shadow: 0 10px 26px rgba(37,99,235,0.45);
+}
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+.logout-btn {
+  margin-top: 14px;
+  padding: 11px 14px;
+
+  background: rgba(239,68,68,0.14);
+  border: 1px solid rgba(239,68,68,0.35);
+  border-radius: 10px;
+
+  font-size: 14px;
+  font-weight: 500;
+  color: #fca5a5;
+
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+}
+
+.logout-btn:hover {
+  background: rgba(239,68,68,0.25);
+  transform: translateY(-1px);
+}
+
+/* =====================================================
+   MAIN AREA
+===================================================== */
+
+.student-main {
+  flex: 1;
+  overflow-y: auto;
+
+  padding: clamp(18px, 3vw, 32px);
+
+  background: radial-gradient(
+    1200px 600px at top center,
+    #020617,
+    #010314
+  );
+}
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.student-header {
+  margin-bottom: 20px;
+}
+
+.page-title {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.header-row {
+  margin-top: 6px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.page-subtitle {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.theme-toggle {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: none;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  background: #1e293b;
+  color: #e5e7eb;
+
+  cursor: pointer;
+}
+
+.theme-toggle:hover {
+  background: #334155;
+}
+
+/* =====================================================
+   CONTENT CARD
+===================================================== */
+
+.content-card {
+  background: linear-gradient(
+    180deg,
+    rgba(15,23,42,0.92),
+    rgba(2,6,23,0.92)
+  );
+
+  border: 1px solid rgba(148,163,184,0.18);
+  border-radius: 16px;
+  padding: clamp(16px, 2.5vw, 26px);
+
+  min-height: calc(100vh - 160px);
+
+  box-shadow: 0 25px 60px rgba(0,0,0,0.45);
+}
+
+/* =====================================================
+   LIGHT MODE
+===================================================== */
+
+.student-layout.light {
+  background: #f4f6f9;
+  color: #0f172a;
+}
+
+.student-layout.light .student-sidebar {
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  box-shadow: none;
+}
+
+.student-layout.light .menu button {
+  color: #374151;
+}
+
+.student-layout.light .menu button:hover {
+  background: #eef2ff;
+}
+
+.student-layout.light .student-main {
+  background: #f4f6f9;
+}
+
+.student-layout.light .content-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.08);
+}
+
+.student-layout.light .page-subtitle {
+  color: #6b7280;
+}
+
+.student-layout.light .theme-toggle {
+  background: #e5e7eb;
+  color: #0f172a;
+}
+
+.student-layout.light .theme-toggle:hover {
+  background: #d1d5db;
+}
+
+/* =====================================================
+   RESPONSIVE — EXAM SAFE
+===================================================== */
+
+@media (max-width: 1024px) {
+  .student-sidebar {
+    width: 230px;
+    min-width: 230px;
+  }
+}
+
+@media (max-width: 768px) {
+  .student-layout {
+    flex-direction: column;
+  }
+
+  .student-sidebar {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    padding: 10px 12px;
+  }
+
+  .brand {
+    margin-bottom: 0;
+    margin-right: 12px;
+  }
+
+  .menu {
+    flex-direction: row;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .menu::-webkit-scrollbar {
+    display: none;
+  }
+
+  .menu button {
+    white-space: nowrap;
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .logout-btn {
+    margin-left: auto;
+    padding: 10px 12px;
+  }
+
+  .student-main {
+    padding: 16px 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .theme-toggle {
+    align-self: flex-end;
+  }
+}
+
+/* =====================================================
+   EXAM LIGHT MODE FIXES
+===================================================== */
+
+body.light .exam-shell {
+  background: linear-gradient(
+    180deg,
+    #f8fafc 0%,
+    #eef2ff 100%
+  );
+  color: #0f172a;
+}
+
+body.light .question-card {
+  background: rgba(255,255,255,0.9);
+  color: #0f172a;
+  border: 1px solid rgba(99,102,241,0.15);
+}
+
+body.light .exam-progress {
+  background: #e5e7eb;
+}
+
+body.light .camera-proctor {
+  border-color: #2563eb;
+}

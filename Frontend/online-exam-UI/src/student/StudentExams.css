@@ -1,10 +1,11 @@
 /* =====================================================
-   STUDENT EXAMS — ADMIN PARITY LAYER
+   STUDENT EXAMS — REFINED EXAM UX LAYER (FIXED)
 ===================================================== */
 
 .student-exams {
-  max-width: 1000px;
+  max-width: 1040px;
   margin-inline: auto;
+  padding: 8px 12px;
 }
 
 /* ================= TITLE ================= */
@@ -12,7 +13,7 @@
 .student-exams h3 {
   font-size: 22px;
   font-weight: 700;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
   letter-spacing: -0.015em;
 }
 
@@ -21,7 +22,7 @@
 .student-exams .card-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
 /* ================= EXAM CARD ================= */
@@ -31,39 +32,39 @@
 
   background: linear-gradient(
     180deg,
-    rgba(15, 23, 42, 0.95),
-    rgba(2, 6, 23, 0.95)
+    rgba(15, 23, 42, 0.96),
+    rgba(2, 6, 23, 0.96)
   );
 
   border: 1px solid #1e293b;
   border-radius: 18px;
-  padding: 18px 22px;
+  padding: 20px 24px;
 
   box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
 
   transition:
-    transform 0.2s ease,
-    box-shadow 0.25s ease,
+    transform 0.18s ease,
+    box-shadow 0.22s ease,
     border-color 0.2s ease;
 }
 
-/* Admin-style left accent */
+/* Left accent */
 .student-exams .exam-card::before {
   content: "";
   position: absolute;
   left: 0;
-  top: 12%;
-  height: 76%;
+  top: 14%;
+  height: 72%;
   width: 4px;
   border-radius: 999px;
   background: transparent;
   transition: background 0.25s ease;
 }
 
-/* Hover presence */
+/* Hover */
 .student-exams .exam-card:hover {
   transform: translateY(-2px);
-  border-color: rgba(99, 102, 241, 0.5);
+  border-color: rgba(99, 102, 241, 0.55);
   box-shadow: 0 22px 52px rgba(0, 0, 0, 0.6);
 }
 
@@ -75,113 +76,114 @@
   );
 }
 
-/* ================= ROW LAYOUT ================= */
+/* ================= ROW ================= */
 
 .student-exams .exam-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
+  gap: 24px;
 }
 
 /* ================= LEFT ================= */
 
 .student-exams .exam-left strong {
-  font-size: 15px;
+  font-size: 15.5px;
   font-weight: 600;
   letter-spacing: -0.01em;
 }
 
 .student-exams .exam-left .muted {
   font-size: 13px;
-  margin-top: 4px;
+  margin-top: 6px;
   color: #9ca3af;
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-/* ================= RIGHT (ACTIONS) ================= */
+/* ================= RIGHT ================= */
 
 .student-exams .exam-right {
   display: flex;
   align-items: center;
 }
 
-/* Normalize buttons */
 .student-exams .exam-right button {
-  min-width: 108px;
-  padding: 10px 16px;
+  min-width: 116px;
+  padding: 11px 18px;
   font-size: 14px;
   font-weight: 600;
-  border-radius: 10px;
+  border-radius: 12px;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.student-exams .exam-right button:active {
+  transform: scale(0.97);
 }
 
 /* ================= BUTTON STATES ================= */
 
-/* Start */
 .student-exams .start-btn {
   background: linear-gradient(135deg, #2563eb, #3b82f6);
-  box-shadow: 0 8px 22px rgba(37, 99, 235, 0.45);
+  box-shadow: 0 10px 26px rgba(37, 99, 235, 0.45);
 }
 
 .student-exams .start-btn:hover {
-  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.6);
+  box-shadow: 0 14px 34px rgba(37, 99, 235, 0.6);
 }
 
-/* Resume */
 .student-exams .resume-btn {
   background: linear-gradient(135deg, #f59e0b, #fbbf24);
   color: #111827;
-  box-shadow: 0 8px 22px rgba(245, 158, 11, 0.45);
+  box-shadow: 0 10px 26px rgba(245, 158, 11, 0.45);
 }
 
 .student-exams .resume-btn:hover {
-  box-shadow: 0 12px 30px rgba(245, 158, 11, 0.6);
+  box-shadow: 0 14px 34px rgba(245, 158, 11, 0.6);
 }
 
-/* Completed */
 .student-exams .completed-btn {
   background: linear-gradient(135deg, #16a34a, #22c55e);
   color: #ecfdf5;
   cursor: not-allowed;
-  box-shadow: 0 6px 18px rgba(22, 163, 74, 0.35);
+  box-shadow: 0 8px 20px rgba(22, 163, 74, 0.35);
   opacity: 0.95;
 }
 
 /* ================= EMPTY STATE ================= */
 
 .student-exams .empty-state {
-  margin-top: 48px;
+  margin-top: 56px;
   text-align: center;
   color: #9ca3af;
   font-size: 14px;
 }
 
-/* ================= SKELETON ================= */
+/* =====================================================
+   ✅ LIGHT MODE — CORRECT SCOPE
+===================================================== */
 
-.student-exams .skeleton {
-  border-radius: 16px;
-}
-
-/* ================= LIGHT MODE ================= */
-
-.light .student-exams .exam-card {
+.student-layout.light .student-exams .exam-card {
   background: #ffffff;
   border: 1px solid #e5e7eb;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
 }
 
-.light .student-exams .exam-card:hover {
+.student-layout.light .student-exams .exam-card:hover {
   border-color: #6366f1;
   box-shadow: 0 22px 48px rgba(0, 0, 0, 0.12);
 }
 
-.light .student-exams .exam-card::before {
+.student-layout.light .student-exams .exam-card::before {
   background: transparent;
 }
 
-.light .student-exams .exam-card:hover::before {
+.student-layout.light .student-exams .exam-card:hover::before {
   background: linear-gradient(
     180deg,
     #6366f1,
@@ -189,7 +191,11 @@
   );
 }
 
-.light .student-exams .exam-left .muted {
+.student-layout.light .student-exams .exam-left strong {
+  color: #0f172a;
+}
+
+.student-layout.light .student-exams .exam-left .muted {
   color: #6b7280;
 }
 
@@ -197,27 +203,31 @@
 
 @media (max-width: 768px) {
   .student-exams {
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 640px) {
-  .student-exams h3 {
-    font-size: 20px;
+    padding: 8px;
   }
 
   .student-exams .exam-row {
     flex-direction: column;
     align-items: flex-start;
+    gap: 14px;
   }
 
   .student-exams .exam-right {
     width: 100%;
     justify-content: flex-end;
-    margin-top: 10px;
   }
 
   .student-exams .exam-right button {
     width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .student-exams h3 {
+    font-size: 20px;
+  }
+
+  .student-exams .exam-card {
+    padding: 18px;
   }
 }

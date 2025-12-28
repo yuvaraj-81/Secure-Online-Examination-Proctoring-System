@@ -1,132 +1,80 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-
-import StudentCourses from "./StudentCourses";
-import StudentExams from "./StudentExams";
-import StudentResults from "./StudentResults";
-import StudentProfile from "./StudentProfile";
-
+import { useEffect, useState } from "react";
+import { getStudentDashboard } from "../services/studentService";
 import "./StudentDashboard.css";
 
 const StudentDashboard = () => {
-  const [activeTab, setActiveTab] = useState("courses");
-  const [lightMode, setLightMode] = useState(false);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const navigate = useNavigate();
-
-  /* ===============================
-     LOAD SAVED THEME
-  =============================== */
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "light") {
-      setLightMode(true);
-    }
+    getStudentDashboard()
+      .then(res => setData(res.data))
+      .catch(() => setData(null))
+      .finally(() => setLoading(false));
   }, []);
 
-  /* ===============================
-     SAVE THEME
-  =============================== */
-  useEffect(() => {
-    localStorage.setItem("theme", lightMode ? "light" : "dark");
-  }, [lightMode]);
-
-  const handleLogout = () => {
-    localStorage.clear();
-    navigate("/login");
-  };
-
-  const renderTab = () => {
-    switch (activeTab) {
-      case "exams":
-        return <StudentExams />;
-      case "results":
-        return <StudentResults />;
-      case "profile":
-        return <StudentProfile />;
-      default:
-        return <StudentCourses />;
-    }
-  };
+  if (loading) return <p>Loading dashboard...</p>;
+  if (!data) return <p>Failed to load dashboard</p>;
 
   return (
-    <div className={`student-layout ${lightMode ? "light" : ""}`}>
-      {/* ================= SIDEBAR ================= */}
-      <aside className="student-sidebar">
-        {/* Brand */}
-        <div className="brand">
-          <h2>🎓 Student</h2>
-          <span className="subtitle">Dashboard</span>
+    <div className="student-dashboard">
+      <h2>Dashboard Overview</h2>
+
+      {/* ===== KPI CARDS ===== */}
+      <div className="dashboard-cards">
+        <div className="dash-card">
+          <span>Total Exams</span>
+          <strong>{data.totalExams}</strong>
         </div>
 
-        {/* Menu */}
-        <nav className="menu">
-          <button
-            className={activeTab === "courses" ? "active" : ""}
-            onClick={() => setActiveTab("courses")}
-          >
-            <span className="menu-icon">📘</span>
-            <span className="menu-label">Courses</span>
-          </button>
+        <div className="dash-card success">
+          <span>Passed</span>
+          <strong>{data.passed}</strong>
+        </div>
 
-          <button
-            className={activeTab === "exams" ? "active" : ""}
-            onClick={() => setActiveTab("exams")}
-          >
-            <span className="menu-icon">📝</span>
-            <span className="menu-label">Exams</span>
-          </button>
+        <div className="dash-card">
+          <span>Attempted</span>
+          <strong>{data.attempted}</strong>
+        </div>
 
-          <button
-            className={activeTab === "results" ? "active" : ""}
-            onClick={() => setActiveTab("results")}
-          >
-            <span className="menu-icon">📊</span>
-            <span className="menu-label">Results</span>
-          </button>
+        <div className="dash-card info">
+          <span>Avg Score</span>
+          <strong>{data.averageScore}%</strong>
+        </div>
+      </div>
 
-          <button
-            className={activeTab === "profile" ? "active" : ""}
-            onClick={() => setActiveTab("profile")}
-          >
-            <span className="menu-icon">👤</span>
-            <span className="menu-label">Profile</span>
-          </button>
-        </nav>
+      {/* ===== PROGRESS ===== */}
+      <div className="progress-box">
+        <div className="progress-label">
+          Overall Completion — {data.completionPercent}%
+        </div>
+        <div className="progress-bar">
+          <div
+            className="progress-fill"
+            style={{ width: `${data.completionPercent}%` }}
+          />
+        </div>
+      </div>
 
-        {/* Logout */}
-        <button className="logout-btn" onClick={handleLogout}>
-          🚪 Logout
-        </button>
-      </aside>
-
-      {/* ================= MAIN ================= */}
-      <main className="student-main">
-        {/* Header */}
-        <header className="student-header">
-          <h1 className="page-title">
-            {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
-          </h1>
-
-          <div className="header-row">
-            <span className="page-subtitle">
-              Track your progress and stay ahead
-            </span>
-
-            <button
-              className="theme-toggle"
-              onClick={() => setLightMode(prev => !prev)}
+      {/* ===== LATEST ACTIVITY ===== */}
+      {data.latestExam && (
+        <div className="latest-exam">
+          <h4>Latest Activity</h4>
+          <p>
+            <strong>{data.latestExam.title}</strong> —{" "}
+            <span
+              className={
+                data.latestExam.status === "PASS"
+                  ? "pass"
+                  : "fail"
+              }
             >
-              {lightMode ? "🌙 Dark" : "☀️ Light"}
-            </button>
-          </div>
-        </header>
-
-        {/* Content */}
-        <div className="content-card">
-          {renderTab()}
+              {data.latestExam.status}
+            </span>{" "}
+            ({data.latestExam.score}%)
+          </p>
         </div>
-      </main>
+      )}
     </div>
   );
 };

@@ -16,13 +16,13 @@ const StudentCourses = () => {
     <section className="student-courses">
       {/* ================= HEADER ================= */}
       <div className="courses-header">
-        <h3>📘 My Courses</h3>
+        <h3> My Courses</h3>
 
-        {Array.isArray(courses) && (
+        {/* {Array.isArray(courses) && (
           <span className="course-count">
             {courses.length} total
           </span>
-        )}
+        )} */}
       </div>
 
       {/* ================= LOADING ================= */}

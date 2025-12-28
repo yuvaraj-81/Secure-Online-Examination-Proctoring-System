@@ -27,7 +27,6 @@ const shuffleArray = (array, seed) => {
       result[currentIndex]
     ];
   }
-
   return result;
 };
 
@@ -35,33 +34,78 @@ const ExamAttempt = () => {
   const { examId } = useParams();
   const navigate = useNavigate();
 
-  const [status, setStatus] = useState("LOADING");
+  /* ================= STATE ================= */
+  const [ready, setReady] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
   const [timeLeft, setTimeLeft] = useState(0);
   const [violations, setViolations] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [examTitle, setExamTitle] = useState("Exam");
-
-  /* 🎥 VIDEO PROCTORING STATE */
-  const [cameraActive, setCameraActive] = useState(false);
+  const [animatedProgress, setAnimatedProgress] = useState(0);
 
   const videoRef = useRef(null);
-  const mediaStreamRef = useRef(null);
-
+  const streamRef = useRef(null);
   const timerRef = useRef(null);
   const submittedRef = useRef(false);
-  const violationLockRef = useRef(false);
 
-  /* ================= OPTIONS (RANDOMIZED) ================= */
+  /* ================= OPTIONS ================= */
   const buildOptions = useCallback(q => {
     if (!q) return [];
-    const base = [q.optionA, q.optionB, q.optionC, q.optionD]
-      .filter(Boolean)
-      .map(o => o.trim());
-
-    return shuffleArray(base, q.id);
+    return shuffleArray(
+      [q.optionA, q.optionB, q.optionC, q.optionD].filter(Boolean),
+      q.id
+    );
   }, []);
+
+  /* ================= USER ACTION ================= */
+  const handleStartExam = async () => {
+    try {
+      await document.documentElement.requestFullscreen();
+      setReady(true);
+    } catch (err) {
+      alert("Fullscreen permission is mandatory.");
+    }
+  };
+
+  /* ================= 🎥 CAMERA — CORRECT WAY ================= */
+  useEffect(() => {
+    if (!ready) return;
+
+    const startCamera = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: false
+        });
+
+        streamRef.current = stream;
+
+        const video = videoRef.current;
+        if (video) {
+          video.srcObject = stream;
+          video.muted = true;
+          video.playsInline = true;
+          video.autoplay = true;
+        }
+
+        stream.getVideoTracks()[0].onended = () => {
+          addViolation();
+        };
+      } catch (err) {
+        alert("Camera permission denied.");
+        safeSubmit("CAMERA_DENIED");
+      }
+    };
+
+    startCamera();
+
+    return () => {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(t => t.stop());
+      }
+    };
+  }, [ready]);
 
   /* ================= SAFE SUBMIT ================= */
   const safeSubmit = useCallback(
@@ -86,8 +130,8 @@ const ExamAttempt = () => {
         });
       } catch {}
 
-      if (mediaStreamRef.current) {
-        mediaStreamRef.current.getTracks().forEach(t => t.stop());
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(t => t.stop());
       }
 
       if (document.fullscreenElement) {
@@ -99,135 +143,45 @@ const ExamAttempt = () => {
     [examId, answers, violations, navigate]
   );
 
-  /* ================= VIOLATION HANDLER ================= */
-  const registerViolation = useCallback(
-    reason => {
-      if (submittedRef.current || violationLockRef.current) return;
+  /* ================= VIOLATIONS ================= */
+  const addViolation = useCallback(() => {
+    setViolations(v => {
+      const next = v + 1;
 
-      violationLockRef.current = true;
-
-      setViolations(v => {
-        const next = v + 1;
-
-        saveExamProgress(examId, {
-          answers: JSON.stringify(answers),
-          violations: next
-        }).catch(() => {});
-
-        if (next >= MAX_VIOLATIONS) {
-          safeSubmit("MAX_VIOLATIONS");
-        }
-
-        return next;
-      });
-
-      setTimeout(() => {
-        violationLockRef.current = false;
-      }, 1000);
-    },
-    [examId, answers, safeSubmit]
-  );
-
-  /* ================= 🎥 CAMERA SETUP ================= */
-  useEffect(() => {
-    if (status !== "ACTIVE") return;
-
-    const initCamera = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
-          audio: false
-        });
-
-        mediaStreamRef.current = stream;
-        videoRef.current.srcObject = stream;
-        setCameraActive(true);
-
-        stream.getVideoTracks()[0].onended = () => {
-          setCameraActive(false);
-          registerViolation("CAMERA_DISABLED");
-        };
-      } catch {
-        registerViolation("CAMERA_DENIED");
+      if (next >= MAX_VIOLATIONS) {
+        alert("Exam terminated due to violations.");
+        safeSubmit("VIOLATION_LIMIT");
       }
-    };
 
-    initCamera();
+      return next;
+    });
+  }, [safeSubmit]);
 
-    return () => {
-      if (mediaStreamRef.current) {
-        mediaStreamRef.current.getTracks().forEach(t => t.stop());
-      }
-    };
-  }, [status, registerViolation]);
-
-  /* ================= PROCTORING EVENTS ================= */
+  /* ================= LOAD EXAM ================= */
   useEffect(() => {
-    if (status !== "ACTIVE") return;
-
-    const onVisibility = () => {
-      if (document.hidden) registerViolation("TAB_SWITCH");
-    };
-
-    const onBlur = () => registerViolation("WINDOW_BLUR");
-
-    const disableContextMenu = e => {
-      e.preventDefault();
-      registerViolation("RIGHT_CLICK");
-    };
-
-    document.addEventListener("visibilitychange", onVisibility);
-    window.addEventListener("blur", onBlur);
-    document.addEventListener("contextmenu", disableContextMenu);
-
-    return () => {
-      document.removeEventListener("visibilitychange", onVisibility);
-      window.removeEventListener("blur", onBlur);
-      document.removeEventListener("contextmenu", disableContextMenu);
-    };
-  }, [status, registerViolation]);
-
-  /* ================= START / RESUME ================= */
-  useEffect(() => {
-    let mounted = true;
-
     (async () => {
       try {
         const { data } = await startOrResumeExam(examId);
-        if (!mounted) return;
 
-        if (["SUBMITTED", "TERMINATED"].includes(data.status)) {
-          alert("Exam already attempted");
-          navigate("/student/exams", { replace: true });
-          return;
-        }
-
-        setExamTitle(data.examTitle || "Exam");
-        setViolations(data.violations ?? 0);
+        setExamTitle(data.examTitle);
+        setViolations(data.violations || 0);
         setAnswers(data.answersJson ? JSON.parse(data.answersJson) : {});
-
-        const seed = data.examAttemptId || Number(examId);
-        setQuestions(shuffleArray(data.questions || [], seed));
-
-        const remaining = Math.max(
-          0,
-          Math.floor((new Date(data.endsAt) - Date.now()) / 1000)
+        setQuestions(
+          shuffleArray(data.questions || [], data.examAttemptId || examId)
         );
-        setTimeLeft(remaining);
 
-        setStatus("ACTIVE");
-        document.documentElement.requestFullscreen().catch(() => {});
+        setTimeLeft(
+          Math.max(0, Math.floor((new Date(data.endsAt) - Date.now()) / 1000))
+        );
       } catch {
         navigate("/student/exams", { replace: true });
       }
     })();
-
-    return () => (mounted = false);
   }, [examId, navigate]);
 
   /* ================= TIMER ================= */
   useEffect(() => {
-    if (status !== "ACTIVE") return;
+    if (!ready) return;
 
     timerRef.current = setInterval(() => {
       setTimeLeft(t => {
@@ -241,62 +195,81 @@ const ExamAttempt = () => {
     }, 1000);
 
     return () => clearInterval(timerRef.current);
-  }, [status, safeSubmit]);
+  }, [ready, safeSubmit]);
 
-  /* ================= UI ================= */
-  if (status === "LOADING") return <p>Loading exam...</p>;
+  /* ================= SECURITY ================= */
+  useEffect(() => {
+    if (!ready) return;
+
+    const onVisibility = () => document.hidden && addViolation();
+    const onFullscreen = () =>
+      !document.fullscreenElement && safeSubmit("EXIT_FULLSCREEN");
+
+    document.addEventListener("visibilitychange", onVisibility);
+    document.addEventListener("fullscreenchange", onFullscreen);
+
+    return () => {
+      document.removeEventListener("visibilitychange", onVisibility);
+      document.removeEventListener("fullscreenchange", onFullscreen);
+    };
+  }, [ready, addViolation, safeSubmit]);
+
+  /* ================= PROGRESS ================= */
+  const progressPercent =
+    questions.length === 0
+      ? 0
+      : Math.round(((currentIndex + 1) / questions.length) * 100);
+
+  useEffect(() => {
+    requestAnimationFrame(() => setAnimatedProgress(progressPercent));
+  }, [progressPercent]);
 
   const q = questions[currentIndex];
   const options = buildOptions(q);
-  const selectedAnswer = answers[q?.id];
 
   return (
     <div className="exam-shell">
-     {/* 🎥 LIVE CAMERA PREVIEW */}
-<div className={`camera-proctor ${cameraActive ? "ok" : "error"}`}>
-  <video
-    ref={videoRef}
-    autoPlay
-    muted
-    playsInline
-  />
+      {/* ===== MODAL ===== */}
+      {!ready && (
+        <div className="exam-modal-backdrop">
+          <div className="exam-modal-card">
+            <h2>{examTitle}</h2>
+            <p>Camera & fullscreen access is required.</p>
+            <button onClick={handleStartExam}>Start Exam</button>
+          </div>
+        </div>
+      )}
 
-  <div className="camera-overlay">
-    <span className="camera-label">
-      {cameraActive ? "Camera Active" : "Camera Error"}
-    </span>
+      {/* ===== EXAM UI ===== */}
+      <div className={`exam-content ${!ready ? "blurred" : ""}`}>
+        <div className="exam-top">
+          <h2>{examTitle}</h2>
 
-    <span className="violation-badge">
-      ⚠ {violations}/{MAX_VIOLATIONS}
-    </span>
-  </div>
-</div>
+          <div className="camera-proctor">
+            <video ref={videoRef} autoPlay muted playsInline />
+            <span className="violation-badge">
+              ⚠ {violations}/{MAX_VIOLATIONS}
+            </span>
+          </div>
+        </div>
 
+        <div className="exam-progress">
+          <div
+            className="exam-progress-bar"
+            style={{ width: `${animatedProgress}%` }}
+          />
+        </div>
 
-
-      <h2 className="exam-title">{examTitle}</h2>
-
-      <div className="exam-header">
-        <span className="timer">
-          ⏱ {Math.floor(timeLeft / 60)}:
-          {String(timeLeft % 60).padStart(2, "0")}
-        </span>
-        <span className="violation">
-          ⚠ {violations}/{MAX_VIOLATIONS}
-        </span>
-      </div>
-
-      <main className="exam-body">
         <div className="question-card">
           <strong>
-            {currentIndex + 1}. {q.questionText}
+            {currentIndex + 1}. {q?.questionText}
           </strong>
 
           {options.map(opt => (
             <label key={opt}>
               <input
                 type="radio"
-                checked={selectedAnswer === opt}
+                checked={answers[q.id] === opt}
                 onChange={() =>
                   setAnswers(prev => ({ ...prev, [q.id]: opt }))
                 }
@@ -305,25 +278,25 @@ const ExamAttempt = () => {
             </label>
           ))}
         </div>
-      </main>
 
-      <footer className="exam-footer">
-        {currentIndex < questions.length - 1 ? (
-          <button
-            disabled={!selectedAnswer}
-            onClick={() => setCurrentIndex(i => i + 1)}
-          >
-            Next
-          </button>
-        ) : (
-          <button
-            disabled={!selectedAnswer}
-            onClick={() => safeSubmit("MANUAL_SUBMIT")}
-          >
-            Submit Exam
-          </button>
-        )}
-      </footer>
+        <footer className="exam-footer">
+          {currentIndex < questions.length - 1 ? (
+            <button
+              disabled={!answers[q?.id]}
+              onClick={() => setCurrentIndex(i => i + 1)}
+            >
+              Next
+            </button>
+          ) : (
+            <button
+              disabled={!answers[q?.id]}
+              onClick={() => safeSubmit("MANUAL_SUBMIT")}
+            >
+              Submit Exam
+            </button>
+          )}
+        </footer>
+      </div>
     </div>
   );
 };

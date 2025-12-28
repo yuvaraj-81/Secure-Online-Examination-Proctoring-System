@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import {
   getMyResults,
   getResultReview,
-  getResultSummary
+  getResultSummary,
+  downloadResultPdf
 } from "../services/studentService";
 import "./StudentResults.css";
 
@@ -51,11 +52,37 @@ const StudentResults = () => {
     };
   }, [selectedResult, reviewResult]);
 
+  /* ================= PDF DOWNLOAD ================= */
+
+  const handleDownloadPdf = async (resultId) => {
+    try {
+      const res = await downloadResultPdf(resultId);
+
+      const blob = new Blob([res.data], {
+        type: "application/pdf"
+      });
+
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `result-${resultId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to download PDF");
+    }
+  };
+
   if (loading) return <p>Loading results...</p>;
 
   return (
     <div className="student-results">
-      <h3>📊 My Results</h3>
+      <h3> My Results</h3>
 
       {/* ================= SUMMARY ================= */}
       {summary && (
@@ -80,7 +107,7 @@ const StudentResults = () => {
       {/* ================= EMPTY ================= */}
       {results.length === 0 && (
         <div className="empty-state">
-          📭 No results yet
+           No results yet
           <p>Attempt an exam to see your performance.</p>
         </div>
       )}
@@ -96,9 +123,7 @@ const StudentResults = () => {
               <div className="result-header">
                 <strong>{r.examTitle}</strong>
 
-                <span
-                  className={`status ${passed ? "pass" : "fail"}`}
-                >
+                <span className={`status ${passed ? "pass" : "fail"}`}>
                   {passed ? "PASS" : "FAIL"}
                 </span>
               </div>
@@ -120,8 +145,7 @@ const StudentResults = () => {
                 </div>
 
                 <div className="meta">
-                  📅{" "}
-                  {new Date(r.submittedAt).toLocaleDateString()}
+                  📅 {new Date(r.submittedAt).toLocaleDateString()}
                 </div>
 
                 <div className="result-actions">
@@ -177,15 +201,41 @@ const StudentResults = () => {
             </div>
 
             <div className="modal-body">
-              <p><strong>Status:</strong> {selectedResult.score >= PASS_PERCENT ? "PASS" : "FAIL"}</p>
-              <p><strong>Score:</strong> {selectedResult.score}%</p>
-              <p><strong>Total Questions:</strong> {selectedResult.totalQuestions}</p>
-              <p><strong>Correct Answers:</strong> {selectedResult.correctAnswers}</p>
-              <p><strong>Violations:</strong> {selectedResult.violations}</p>
+              <p>
+                <strong>Status:</strong>{" "}
+                {selectedResult.score >= PASS_PERCENT ? "PASS" : "FAIL"}
+              </p>
+              <p>
+                <strong>Score:</strong> {selectedResult.score}%
+              </p>
+              <p>
+                <strong>Total Questions:</strong>{" "}
+                {selectedResult.totalQuestions}
+              </p>
+              <p>
+                <strong>Correct Answers:</strong>{" "}
+                {selectedResult.correctAnswers}
+              </p>
+              <p>
+                <strong>Violations:</strong>{" "}
+                {selectedResult.violations}
+              </p>
               <p>
                 <strong>Submitted At:</strong>{" "}
                 {new Date(selectedResult.submittedAt).toLocaleString()}
               </p>
+
+              {/* 🔥 SINGLE SOURCE: PDF DOWNLOAD */}
+              <div style={{ marginTop: "18px", textAlign: "right" }}>
+                <button
+                  className="view-btn"
+                  onClick={() =>
+                    handleDownloadPdf(selectedResult.id)
+                  }
+                >
+                  Download Result PDF
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -234,7 +284,8 @@ const StudentResults = () => {
                         else if (
                           opt === q.selectedAnswer &&
                           q.selectedAnswer !== q.correctAnswer
-                        ) cls = "wrong";
+                        )
+                          cls = "wrong";
 
                         return (
                           <li key={opt} className={cls}>

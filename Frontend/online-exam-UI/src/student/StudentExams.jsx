@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { getMyExams } from "../services/studentService";
 import Skeleton from "../components/Skeleton";
@@ -6,7 +6,12 @@ import "./StudentExams.css";
 
 const StudentExams = () => {
   const navigate = useNavigate();
+
   const [exams, setExams] = useState(null);
+  const [startingExamId, setStartingExamId] = useState(null);
+
+  // prevents race conditions on fast clicks
+  const startingRef = useRef(false);
 
   /* ================= FETCH EXAMS ================= */
 
@@ -25,11 +30,57 @@ const StudentExams = () => {
     fetchExams();
   }, [fetchExams]);
 
+  /* ================= START / RESUME ================= */
+
+  const startExam = async (examId) => {
+    if (startingRef.current) return;
+
+    startingRef.current = true;
+    setStartingExamId(examId);
+
+    try {
+      /* ========= FULLSCREEN (USER GESTURE) ========= */
+      if (!document.fullscreenElement) {
+        await document.documentElement.requestFullscreen();
+      }
+
+      /* ========= CAMERA PERMISSION ========= */
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: false
+      });
+
+      // store globally for ExamAttempt.jsx
+      window.__examCameraStream = stream;
+
+      navigate(`/exam/attempt/${examId}`);
+    } catch (err) {
+      console.error("Exam start blocked:", err);
+
+      alert(
+        "Fullscreen and camera permission are required to start the exam."
+      );
+
+      /* ========= CLEANUP ========= */
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch(() => {});
+      }
+
+      if (window.__examCameraStream) {
+        window.__examCameraStream.getTracks().forEach(t => t.stop());
+        window.__examCameraStream = null;
+      }
+    } finally {
+      startingRef.current = false;
+      setStartingExamId(null);
+    }
+  };
+
   /* ================= UI ================= */
 
   return (
     <div className="student-exams">
-      <h3>📝 Available Exams</h3>
+      <h3>Available Exams</h3>
 
       {/* Loading */}
       {!exams && (
@@ -44,15 +95,18 @@ const StudentExams = () => {
         <p className="empty-state">No exams available</p>
       )}
 
-      {/* Data */}
+      {/* Exams List */}
       {exams && exams.length > 0 && (
         <ul className="card-list">
           {exams.map(exam => {
             const status = exam.attemptStatus;
-            // null | ACTIVE | SUBMITTED | TERMINATED
+            const isStarting = startingExamId === exam.id;
 
             return (
-              <li key={exam.id} className="card-item exam-card">
+              <li
+                key={exam.id}
+                className="card-item exam-card"
+              >
                 <div className="exam-row">
                   {/* LEFT */}
                   <div className="exam-left">
@@ -67,22 +121,20 @@ const StudentExams = () => {
                     {!status && (
                       <button
                         className="primary-btn start-btn"
-                        onClick={() =>
-                          navigate(`/exam/attempt/${exam.id}`)
-                        }
+                        disabled={isStarting}
+                        onClick={() => startExam(exam.id)}
                       >
-                        Start
+                        {isStarting ? "Starting..." : "Start"}
                       </button>
                     )}
 
                     {status === "ACTIVE" && (
                       <button
                         className="primary-btn resume-btn"
-                        onClick={() =>
-                          navigate(`/exam/attempt/${exam.id}`)
-                        }
+                        disabled={isStarting}
+                        onClick={() => startExam(exam.id)}
                       >
-                        Resume
+                        {isStarting ? "Resuming..." : "Resume"}
                       </button>
                     )}
 

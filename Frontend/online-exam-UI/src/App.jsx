@@ -13,11 +13,7 @@ import Results from "./admin/Results";
 import Questions from "./admin/Questions";
 
 /* ================= STUDENT ================= */
-import StudentDashboard from "./student/StudentDashboard";
-import StudentCourses from "./student/StudentCourses";
-import StudentExams from "./student/StudentExams";
-import StudentResults from "./student/StudentResults";
-import StudentProfile from "./student/StudentProfile";
+import StudentLayout from "./student/StudentLayout";
 import ExamAttempt from "./student/ExamAttempt";
 
 import "./App.css";
@@ -47,7 +43,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Root redirect */}
+        {/* ================= ROOT REDIRECT ================= */}
         <Route
           path="/"
           element={
@@ -61,27 +57,21 @@ function App() {
           }
         />
 
-        {/* Auth */}
+        {/* ================= AUTH ================= */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* ================= STUDENT NORMAL PAGES ================= */}
+        {/* ================= STUDENT ================= */}
         <Route
           path="/student"
           element={
             <RequireAuth role="STUDENT">
-              <StudentDashboard />
+              <StudentLayout />
             </RequireAuth>
           }
-        >
-          <Route index element={<StudentExams />} />
-          <Route path="courses" element={<StudentCourses />} />
-          <Route path="exams" element={<StudentExams />} />
-          <Route path="results" element={<StudentResults />} />
-          <Route path="profile" element={<StudentProfile />} />
-        </Route>
+        />
 
-        {/* ================= 🔥 EXAM ATTEMPT (FULLSCREEN) ================= */}
+        {/* ================= EXAM ATTEMPT (FULLSCREEN) ================= */}
         <Route
           path="/exam/attempt/:examId"
           element={
@@ -111,7 +101,7 @@ function App() {
           <Route path="results" element={<Results />} />
         </Route>
 
-        {/* Fallback */}
+        {/* ================= FALLBACK ================= */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

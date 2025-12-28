@@ -3,7 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import {
   getQuestionsByExam,
   addQuestion,
-  deleteQuestion
+  deleteQuestion,
+  importQuestionsPdf
 } from "../services/adminService";
 
 import "./AdminQuestions.css";
@@ -28,6 +29,12 @@ const Questions = () => {
   const [form, setForm] = useState(emptyForm);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+
+  /* 🔥 IMPORT STATE */
+  const [showImport, setShowImport] = useState(false);
+  const [importFile, setImportFile] = useState(null);
+  const [importing, setImporting] = useState(false);
+  const [importMsg, setImportMsg] = useState("");
 
   /* ================= FETCH ================= */
 
@@ -130,11 +137,38 @@ const Questions = () => {
     }
   };
 
+  /* ================= IMPORT ================= */
+
+  const handleImport = async () => {
+    if (!importFile) {
+      alert("Please select a PDF file");
+      return;
+    }
+
+    try {
+      setImporting(true);
+      setImportMsg("");
+
+      const res = await importQuestionsPdf(examId, importFile);
+      setImportMsg(res.data || "Questions imported successfully");
+
+      setImportFile(null);
+      fetchQuestions();
+    } catch (err) {
+      setImportMsg(
+        err?.response?.data ||
+          "Failed to import questions from PDF"
+      );
+    } finally {
+      setImporting(false);
+    }
+  };
+
   /* ================= UI ================= */
 
   return (
     <div className="admin-page">
-      {/* 🔥 HEADER ROW — FIXED ORDER */}
+      {/* 🔥 HEADER (NO IMPORT BUTTON HERE) */}
       <div className="students-header">
         <h2>Manage Questions</h2>
 
@@ -201,13 +235,24 @@ const Questions = () => {
           }
         />
 
-        <button
-          className="primary full"
-          type="submit"
-          disabled={saving}
-        >
-          {saving ? "Adding..." : "Add Question"}
-        </button>
+        {/* 🔥 FORM ACTION ROW */}
+        <div className="form-actions full">
+          <button
+            className="primary"
+            type="submit"
+            disabled={saving}
+          >
+            {saving ? "Adding..." : "Add Question"}
+          </button>
+
+          <button
+            type="button"
+            className="secondary import-btn"
+            onClick={() => setShowImport(true)}
+          >
+            ⬆ Import PDF
+          </button>
+        </div>
       </form>
 
       {/* ===== LIST ===== */}
@@ -244,6 +289,68 @@ const Questions = () => {
               </button>
             </div>
           ))}
+        </div>
+      )}
+
+      {/* ===== IMPORT MODAL ===== */}
+      {showImport && (
+        <div
+          className="modal-overlay"
+          onClick={() => setShowImport(false)}
+        >
+          <div
+            className="modal"
+            onClick={e => e.stopPropagation()}
+          >
+            <h3>Import Questions from PDF</h3>
+
+            <p style={{ fontSize: "13px", color: "#9ca3af" }}>
+              PDF must follow this format:
+              <br />
+              Q1. Question text
+              <br />
+              A. Option A
+              <br />
+              B. Option B
+              <br />
+              C. Option C
+              <br />
+              D. Option D
+              <br />
+              ANSWER: Full option text
+            </p>
+
+            <input
+              type="file"
+              accept="application/pdf"
+              onChange={e =>
+                setImportFile(e.target.files[0])
+              }
+            />
+
+            {importMsg && (
+              <p style={{ marginTop: "10px" }}>
+                {importMsg}
+              </p>
+            )}
+
+            <div className="modal-actions">
+              <button
+                className="secondary"
+                onClick={() => setShowImport(false)}
+              >
+                Cancel
+              </button>
+
+              <button
+                className="primary"
+                disabled={importing}
+                onClick={handleImport}
+              >
+                {importing ? "Importing..." : "Import PDF"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
