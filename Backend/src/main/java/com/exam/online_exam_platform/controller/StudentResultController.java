@@ -6,6 +6,8 @@ import com.exam.online_exam_platform.entity.Result;
 import com.exam.online_exam_platform.repository.ResultRepository;
 import com.exam.online_exam_platform.security.AuthUtil;
 import com.exam.online_exam_platform.service.StudentExamService;
+import com.exam.online_exam_platform.util.ResultPdfGenerator;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,4 +58,23 @@ public class StudentResultController {
                 authUtil.getCurrentUser()
         );
     }
+
+    @GetMapping("/{resultId}/pdf")
+    public ResponseEntity<byte[]> downloadResultPdf(
+            @PathVariable Long resultId
+    ) {
+        var dto = studentExamService.getResultForPdf(
+                resultId,
+                authUtil.getCurrentUser()
+        );
+
+        byte[] pdf = ResultPdfGenerator.generate(dto);
+
+        return ResponseEntity.ok()
+                .header("Content-Disposition",
+                        "attachment; filename=result-" + resultId + ".pdf")
+                .contentType(org.springframework.http.MediaType.APPLICATION_PDF)
+                .body(pdf);
+    }
+
 }

@@ -1,8 +1,6 @@
 package com.exam.online_exam_platform.service;
 
-import com.exam.online_exam_platform.dto.QuestionReviewDTO;
-import com.exam.online_exam_platform.dto.StudentExamDTO;
-import com.exam.online_exam_platform.dto.StudentResultDTO;
+import com.exam.online_exam_platform.dto.*;
 import com.exam.online_exam_platform.entity.*;
 import com.exam.online_exam_platform.repository.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,6 +34,55 @@ public class StudentExamService {
         this.resultRepo = resultRepo;
         this.objectMapper = objectMapper;
     }
+    @Transactional(readOnly = true)
+    public Map<String, Object> getDashboardSummary(User student) {
+
+        List<Result> results = resultRepo.findByStudentId(student.getId());
+
+        int totalExams = results.size();
+        int attempted = results.size();
+
+        long passed = results.stream()
+                .filter(r -> r.getScore() >= 40)
+                .count();
+
+        int averageScore = results.isEmpty()
+                ? 0
+                : (int) Math.round(
+                results.stream()
+                        .mapToInt(Result::getScore)
+                        .average()
+                        .orElse(0)
+        );
+
+        int completionPercent = totalExams == 0
+                ? 0
+                : Math.min(100, (attempted * 100) / totalExams);
+
+        Result latest = results.stream()
+                .max(Comparator.comparing(Result::getSubmittedAt))
+                .orElse(null);
+
+        Map<String, Object> latestExam = null;
+        if (latest != null) {
+            Exam exam = examRepo.findById(latest.getExamId()).orElse(null);
+            latestExam = Map.of(
+                    "title", exam != null ? exam.getTitle() : "Exam",
+                    "score", latest.getScore(),
+                    "status", latest.getScore() >= 40 ? "PASS" : "FAIL"
+            );
+        }
+
+        return Map.of(
+                "totalExams", totalExams,
+                "attempted", attempted,
+                "passed", passed,
+                "averageScore", averageScore,
+                "completionPercent", completionPercent,
+                "latestExam", latestExam
+        );
+    }
+
 
     /* ================= GET ALL EXAMS ================= */
     public List<StudentExamDTO> getAllExamsForStudent(User student) {
@@ -351,5 +398,94 @@ public class StudentExamService {
                 ))
                 .toList();
     }
+
+    @Transactional(readOnly = true)
+    public ResultPdfDTO getResultForPdf(Long resultId, User student) {
+
+        Result result = resultRepo.findById(resultId)
+                .orElseThrow(() -> new RuntimeException("Result not found"));
+
+        if (!result.getStudentId().equals(student.getId())) {
+            throw new RuntimeException("Unauthorized access");
+        }
+
+        Exam exam = examRepo.findById(result.getExamId())
+                .orElseThrow(() -> new RuntimeException("Exam not found"));
+
+        String status = result.getScore() >= 40 ? "PASS" : "FAIL";
+
+        return new ResultPdfDTO(
+                student.getName(),
+                student.getEmail(),
+                exam.getTitle(),
+                result.getScore(),
+                status,
+                result.getTotalQuestions(),
+                result.getCorrectAnswers(),
+                result.getViolations(),
+                result.getSubmittedAt()
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public StudentDashboardDTO getStudentDashboard(User student) {
+
+        List<Exam> allExams = examRepo.findAll();
+        List<Result> results = resultRepo.findByStudentId(student.getId());
+
+        int totalExams = allExams.size();
+        int attempted = results.size();
+
+        int passed = (int) results.stream()
+                .filter(r -> r.getScore() >= 40)
+                .count();
+
+        int failed = attempted - passed;
+
+        int averageScore = attempted == 0
+                ? 0
+                : (int) Math.round(
+                results.stream()
+                        .mapToInt(Result::getScore)
+                        .average()
+                        .orElse(0)
+        );
+
+        int completionPercent = totalExams == 0
+                ? 0
+                : Math.round((attempted * 100f) / totalExams);
+
+        int upcomingExams = totalExams - attempted;
+
+        /* ===== Latest Exam ===== */
+        StudentDashboardDTO.LatestExam latestExam = null;
+
+        Optional<Result> latestResultOpt = results.stream()
+                .max(Comparator.comparing(Result::getSubmittedAt));
+
+        if (latestResultOpt.isPresent()) {
+            Result r = latestResultOpt.get();
+            Exam exam = examRepo.findById(r.getExamId()).orElse(null);
+
+            latestExam = new StudentDashboardDTO.LatestExam();
+            latestExam.examId = r.getExamId();
+            latestExam.title = exam != null ? exam.getTitle() : "Exam";
+            latestExam.score = r.getScore();
+            latestExam.status = r.getScore() >= 40 ? "PASS" : "FAIL";
+            latestExam.submittedAt = r.getSubmittedAt();
+        }
+
+        return new StudentDashboardDTO(
+                totalExams,
+                attempted,
+                passed,
+                failed,
+                averageScore,
+                completionPercent,
+                upcomingExams,
+                latestExam
+        );
+    }
+
 
 }
