@@ -30,7 +30,7 @@ const Questions = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  /* 🔥 IMPORT STATE */
+  /*  IMPORT STATE */
   const [showImport, setShowImport] = useState(false);
   const [importFile, setImportFile] = useState(null);
   const [importing, setImporting] = useState(false);
@@ -168,7 +168,7 @@ const Questions = () => {
 
   return (
     <div className="admin-page">
-      {/* 🔥 HEADER (NO IMPORT BUTTON HERE) */}
+      {/*  HEADER (NO IMPORT BUTTON HERE) */}
       <div className="students-header">
         <h2>Manage Questions</h2>
 
@@ -235,7 +235,7 @@ const Questions = () => {
           }
         />
 
-        {/* 🔥 FORM ACTION ROW */}
+        {/*  FORM ACTION ROW */}
         <div className="form-actions full">
           <button
             className="primary"

@@ -19,7 +19,6 @@
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 14px;
-
   --transition-fast: 0.15s ease;
   --transition-med: 0.25s ease;
 }
@@ -74,14 +73,11 @@ button {
   border-radius: var(--radius-md);
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
-
   font-size: 0.95rem;
   font-weight: 500;
   font-family: inherit;
-
   background-color: #1a1a1a;
   color: inherit;
-
   cursor: pointer;
   transition:
     background-color var(--transition-med),
@@ -173,4 +169,3 @@ textarea {
     font-size: 1.3rem;
   }
 }
-

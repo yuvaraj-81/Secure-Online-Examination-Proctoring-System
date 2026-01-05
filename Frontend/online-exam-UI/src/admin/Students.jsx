@@ -13,7 +13,7 @@ const Students = () => {
   const [loading, setLoading] = useState(true);
   const [editingStudent, setEditingStudent] = useState(null);
 
-  // 🔥 ADD STUDENT STATE (NO PASSWORD)
+  //  ADD STUDENT STATE (NO PASSWORD)
   const [showAddModal, setShowAddModal] = useState(false);
   const [newStudent, setNewStudent] = useState({
     name: "",
@@ -100,7 +100,7 @@ const Students = () => {
 
   return (
     <div className="admin-page">
-      {/* 🔥 HEADER ROW */}
+      {/*  HEADER ROW */}
       <div className="students-header">
         <h2>Students</h2>
 
@@ -108,7 +108,7 @@ const Students = () => {
           className="primary-btn"
           onClick={() => setShowAddModal(true)}
         >
-          + Add Student
+           Add Student
         </button>
       </div>
 

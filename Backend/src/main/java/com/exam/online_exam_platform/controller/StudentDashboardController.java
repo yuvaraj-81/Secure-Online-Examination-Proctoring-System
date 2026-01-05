@@ -16,11 +16,6 @@ public class StudentDashboardController {
     private final StudentExamService studentExamService;
     private final AuthUtil authUtil;
 
-    /**
-     * Student Dashboard Summary
-     * Used by StudentDashboard.jsx
-     * GET /student/dashboard/summary
-     */
     @GetMapping("/summary")
     public StudentDashboardDTO getDashboardSummary() {
         return studentExamService.getStudentDashboard(

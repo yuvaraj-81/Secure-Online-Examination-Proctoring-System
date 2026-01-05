@@ -119,7 +119,6 @@ public class AdminExamService {
             q.setOptionC(pq.optionC);
             q.setOptionD(pq.optionD);
 
-            // ✅ FULL TEXT correct answer
             q.setCorrectAnswer(pq.correctAnswer);
 
             q.setExam(exam);

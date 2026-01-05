@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"; // ✅ REQUIRED
+import { useNavigate } from "react-router-dom";
 import { signup } from "../services/authService";
 
 const Signup = () => {
@@ -16,48 +16,68 @@ const Signup = () => {
       alert("Signup successful. Please login.");
       navigate("/login");
     } catch (err) {
-      alert("Signup failed");
-    }
+  const msg =
+    err.response?.data || "Signup failed. Please try again.";
+  alert(msg);
+}
+
   };
 
   return (
     <div className="auth-page">
-      <div className="auth-container">
-        <h2>Create Account</h2>
+      <div className="auth-card">
+        <div className="auth-card-inner">
+          <h2 className="auth-title">Create account</h2>
+          <p className="auth-subtitle">
+            Join us today, it only takes a few seconds.
+          </p>
 
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Full name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
+          <form className="auth-form" onSubmit={handleSubmit}>
+            {/* Name */}
+            <label className="auth-label">Name</label>
+            <div className="auth-input-wrapper">
+              <input
+                className="auth-input"
+                type="text"
+                placeholder="Your full name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
 
-          <input
-            type="email"
-            placeholder="Email address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+            {/* Email */}
+            <label className="auth-label">Email</label>
+            <div className="auth-input-wrapper">
+              <input
+                className="auth-input"
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+            {/* Password */}
+            <label className="auth-label">Password</label>
+            <div className="auth-input-wrapper">
+              <input
+                className="auth-input"
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
 
-          <button type="submit">Sign Up</button>
-        </form>
+            <button className="auth-button" type="submit">
+              Sign up
+            </button>
+          </form>
 
-        <div
-          className="switch-link"
-          onClick={() => navigate("/login")}
-        >
-          Already have an account? <span>Sign in</span>
+          <div className="auth-switch">
+            Already have an account?{" "}
+            <span onClick={() => navigate("/login")}>Sign in</span>
+          </div>
         </div>
       </div>
     </div>

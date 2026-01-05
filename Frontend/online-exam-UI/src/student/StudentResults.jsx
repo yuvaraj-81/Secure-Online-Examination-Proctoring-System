@@ -225,7 +225,7 @@ const StudentResults = () => {
                 {new Date(selectedResult.submittedAt).toLocaleString()}
               </p>
 
-              {/* 🔥 SINGLE SOURCE: PDF DOWNLOAD */}
+              {/*  SINGLE SOURCE: PDF DOWNLOAD */}
               <div style={{ marginTop: "18px", textAlign: "right" }}>
                 <button
                   className="view-btn"
@@ -233,7 +233,7 @@ const StudentResults = () => {
                     handleDownloadPdf(selectedResult.id)
                   }
                 >
-                  Download Result PDF
+                  Download Result
                 </button>
               </div>
             </div>

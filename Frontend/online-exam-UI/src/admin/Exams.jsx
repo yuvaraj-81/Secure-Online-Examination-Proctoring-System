@@ -16,11 +16,11 @@ const Exams = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 🔥 ADD EXAM MODAL
+  //  ADD EXAM MODAL
   const [showAddModal, setShowAddModal] = useState(false);
   const [creating, setCreating] = useState(false);
 
-  // 🔥 EDIT
+  //  EDIT
   const [editingExam, setEditingExam] = useState(null);
 
   const [form, setForm] = useState({
@@ -125,7 +125,7 @@ const Exams = () => {
 
   return (
     <div className="admin-page">
-      {/* 🔥 HEADER ROW */}
+      {/*  HEADER ROW */}
       <div className="students-header">
         <h2>Exams</h2>
 
@@ -348,5 +348,4 @@ const Exams = () => {
     </div>
   );
 };
-
 export default Exams;

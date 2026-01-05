@@ -486,6 +486,4 @@ public class StudentExamService {
                 latestExam
         );
     }
-
-
 }

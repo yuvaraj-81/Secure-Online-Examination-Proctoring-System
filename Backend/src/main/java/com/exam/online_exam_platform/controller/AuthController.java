@@ -7,6 +7,7 @@ import com.exam.online_exam_platform.service.AuthService;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -32,20 +33,25 @@ public class AuthController {
     /* ================= SIGNUP ================= */
 
     @PostMapping("/signup")
-    public void signup(@RequestBody SignupRequest req) {
+    public ResponseEntity<?> signup(@RequestBody SignupRequest req) {
 
         if (userRepo.existsByEmail(req.email())) {
-            throw new RuntimeException("Email already registered");
+            return ResponseEntity
+                    .badRequest()
+                    .body("Email already registered");
         }
 
         User user = new User();
-        user.setName(req.name());               // 🔥 FIX
+        user.setName(req.name());
         user.setEmail(req.email());
         user.setPassword(passwordEncoder.encode(req.password()));
         user.setRole(Role.STUDENT);
 
         userRepo.save(user);
+
+        return ResponseEntity.ok("Signup successful");
     }
+
 
 
     /* ================= LOGIN ================= */

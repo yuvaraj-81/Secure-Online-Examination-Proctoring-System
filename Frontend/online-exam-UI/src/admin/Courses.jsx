@@ -12,11 +12,11 @@ const Courses = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 🔥 ADD COURSE MODAL STATE
+  //  ADD COURSE MODAL STATE
   const [showAddModal, setShowAddModal] = useState(false);
   const [creating, setCreating] = useState(false);
 
-  // 🔥 EDIT STATE
+  //  EDIT STATE
   const [editingCourse, setEditingCourse] = useState(null);
   const [updating, setUpdating] = useState(false);
 
@@ -121,7 +121,7 @@ const Courses = () => {
 
   return (
     <div className="admin-page">
-      {/* 🔥 HEADER ROW */}
+      {/*  HEADER ROW */}
       <div className="students-header">
         <h2>Courses</h2>
 

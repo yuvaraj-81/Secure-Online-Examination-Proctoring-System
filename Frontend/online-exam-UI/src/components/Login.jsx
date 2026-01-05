@@ -26,31 +26,42 @@ const Login = () => {
 
   return (
   <div className="auth-page">
-    <div className="auth-container">
-      <h2>Sign In</h2>
+    <div className="auth-card">
+      <div className="auth-card-inner">
+        <h2 className="auth-title">Sign In</h2>
+        <p className="auth-subtitle">Welcome back, enter your details to continue.</p>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email address"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+        <form className="auth-form" onSubmit={handleSubmit}>
+          <label className="auth-label">Email</label>
+          <div className="auth-input-wrapper">
+            <input
+              className="auth-input"
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+          <label className="auth-label">Password</label>
+          <div className="auth-input-wrapper">
+            <input
+              className="auth-input"
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
 
-        <button type="submit">Login</button>
-      </form>
+          <button className="auth-button" type="submit">
+            Login
+          </button>
+        </form>
 
-      <div className="switch-link" onClick={() => navigate("/signup")}>
-        New user? <span>Create an account</span>
+        <div className="auth-switch">
+          New here? <span onClick={() => navigate("/signup")}>Create an account</span>
+        </div>
       </div>
     </div>
   </div>
