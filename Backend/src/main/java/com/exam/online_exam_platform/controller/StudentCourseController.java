@@ -8,7 +8,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/student/courses")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "${frontend.url}")
 public class StudentCourseController {
 
     private final CourseRepository courseRepo;
