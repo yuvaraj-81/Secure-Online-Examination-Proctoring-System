@@ -1,0 +1,31 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: exam-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: online_exam_platform
+      MYSQL_USER: exam_user
+      MYSQL_PASSWORD: exam_pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  backend:
+    image: online-exam-backend
+    container_name: exam-backend
+    depends_on:
+      - mysql
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      JWT_SECRET: THIS_IS_A_32_CHAR_LONG_SECRET_KEY_12345
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/online_exam_platform
+      SPRING_DATASOURCE_USERNAME: exam_user
+      SPRING_DATASOURCE_PASSWORD: exam_pass
+
+volumes:
+  mysql_data:

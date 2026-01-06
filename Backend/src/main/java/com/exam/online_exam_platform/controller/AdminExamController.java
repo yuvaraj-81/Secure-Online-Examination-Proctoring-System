@@ -4,7 +4,6 @@ import com.exam.online_exam_platform.dto.QuestionCreateDTO;
 import com.exam.online_exam_platform.entity.Exam;
 import com.exam.online_exam_platform.entity.Question;
 import com.exam.online_exam_platform.service.AdminExamService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,10 +12,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin/exams")
-@RequiredArgsConstructor
 public class AdminExamController {
 
     private final AdminExamService examService;
+
+    // ✅ Explicit constructor (NO Lombok, Maven & Docker safe)
+    public AdminExamController(AdminExamService examService) {
+        this.examService = examService;
+    }
 
     /* ================= EXAMS ================= */
 
@@ -67,5 +70,4 @@ public class AdminExamController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
 }

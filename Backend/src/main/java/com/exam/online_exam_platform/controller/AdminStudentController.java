@@ -2,7 +2,6 @@ package com.exam.online_exam_platform.controller;
 
 import com.exam.online_exam_platform.entity.User;
 import com.exam.online_exam_platform.service.AdminStudentService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,11 +9,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin/students")
-@RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:5173")
 public class AdminStudentController {
 
     private final AdminStudentService studentService;
+
+    // ✅ Explicit constructor (Maven & Docker safe)
+    public AdminStudentController(AdminStudentService studentService) {
+        this.studentService = studentService;
+    }
 
     /* ================= STUDENTS ================= */
 
@@ -24,7 +27,7 @@ public class AdminStudentController {
         return studentService.getAllStudents();
     }
 
-    // 🔥 ADD STUDENT (THIS FIXES 405)
+    // ✅ ADD STUDENT
     @PostMapping
     public ResponseEntity<User> addStudent(@RequestBody User user) {
         User created = studentService.createStudent(user);
