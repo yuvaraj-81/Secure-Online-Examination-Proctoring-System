@@ -2,78 +2,81 @@
 
 .student-dashboard {
   margin-bottom: 36px;
-  animation: fadeIn 0.4s ease-out;
 }
 
-/* ================= KPI CARDS ================= */
+/* ================= SECTION TITLE ================= */
+
+.student-dashboard h2 {
+  margin: 0 0 18px;
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* ================= KPI GRID ================= */
 
 .dashboard-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   gap: 20px;
   margin-bottom: 32px;
 }
 
-/* ================= CARD BASE (DARK DEFAULT) ================= */
+/* ================= KPI CARD ================= */
 
 .dash-card {
   position: relative;
 
-  background: linear-gradient(
-    180deg,
-    rgba(15, 23, 42, 0.95),
-    rgba(2, 6, 23, 0.95)
-  );
+  background:
+    linear-gradient(
+      180deg,
+      rgba(15, 23, 42, 0.96),
+      rgba(2, 6, 23, 0.98)
+    );
 
+  border: 1px solid rgba(148, 163, 184, 0.14);
   border-radius: 18px;
-  padding: 20px;
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
-  overflow: hidden;
+  padding: 22px;
 
-  transform: translateY(8px);
-  opacity: 0;
-  animation: cardIn 0.45s ease forwards;
+  box-shadow:
+    0 14px 38px rgba(0, 0, 0, 0.45);
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
 }
 
-/* Stagger animation */
-.dash-card:nth-child(1) { animation-delay: 0.05s; }
-.dash-card:nth-child(2) { animation-delay: 0.1s; }
-.dash-card:nth-child(3) { animation-delay: 0.15s; }
-.dash-card:nth-child(4) { animation-delay: 0.2s; }
-
-/* Hover polish */
 .dash-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.6);
+  transform: translateY(-2px);
+  border-color: rgba(99, 102, 241, 0.45);
+  box-shadow:
+    0 20px 52px rgba(99, 102, 241, 0.3);
 }
 
-/* Accent border */
-.dash-card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  box-shadow: inset 0 0 0 1px rgba(99, 102, 241, 0.18);
-  pointer-events: none;
-}
+/* ================= KPI LABEL ================= */
 
-/* Labels */
 .dash-card span {
-  font-size: 13px;
-  color: #9ca3af;
-  letter-spacing: 0.02em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #94a3b8;
 }
 
-/* Values */
+/* ================= KPI VALUE ================= */
+
 .dash-card strong {
   display: block;
-  font-size: 28px;
-  margin-top: 8px;
-  font-weight: 700;
-  color: #e5e7eb;
+  margin-top: 10px;
+
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #f9fafb;
 }
 
-/* Status colors */
+/* Semantic emphasis */
 .dash-card.success strong {
   color: #22c55e;
 }
@@ -86,11 +89,10 @@
 
 .progress-box {
   margin-bottom: 34px;
-  animation: slideUp 0.45s ease-out;
 }
 
 .progress-label {
-  font-size: 14px;
+  font-size: 0.85rem;
   font-weight: 500;
   margin-bottom: 10px;
   color: #9ca3af;
@@ -98,7 +100,7 @@
 
 /* Track */
 .progress-bar {
-  height: 12px;
+  height: 10px;
   background: #1e293b;
   border-radius: 999px;
   overflow: hidden;
@@ -107,77 +109,49 @@
 /* Fill */
 .progress-fill {
   height: 100%;
-  width: 0;
   background: linear-gradient(90deg, #6366f1, #818cf8);
   border-radius: inherit;
-  animation: progressGrow 0.8s ease-out forwards;
+  transition: width 0.6s ease;
 }
 
 /* ================= LATEST ACTIVITY ================= */
 
 .latest-exam {
-  background: linear-gradient(
-    180deg,
-    rgba(15, 23, 42, 0.95),
-    rgba(2, 6, 23, 0.95)
-  );
+  background:
+    linear-gradient(
+      180deg,
+      rgba(15, 23, 42, 0.96),
+      rgba(2, 6, 23, 0.98)
+    );
+
+  border: 1px solid rgba(148, 163, 184, 0.14);
   border-radius: 18px;
-  padding: 20px;
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
-  animation: slideUp 0.45s ease-out;
+  padding: 22px;
+
+  box-shadow:
+    0 14px 38px rgba(0, 0, 0, 0.45);
 }
 
 .latest-exam h4 {
-  margin: 0 0 10px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #e5e7eb;
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 .latest-exam p {
-  font-size: 14px;
+  font-size: 0.85rem;
   color: #9ca3af;
 }
 
 .latest-exam .pass {
   color: #22c55e;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .latest-exam .fail {
   color: #ef4444;
-  font-weight: 600;
-}
-
-/* ================= ANIMATIONS ================= */
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes cardIn {
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-/* Uses inline style: style={{ "--progress": "67%" }} */
-@keyframes progressGrow {
-  from { width: 0; }
-  to { width: var(--progress); }
+  font-weight: 700;
 }
 
 /* ================= RESPONSIVE ================= */
@@ -188,23 +162,24 @@
   }
 
   .dash-card strong {
-    font-size: 24px;
+    font-size: 1.6rem;
   }
 }
 
-/* ================= LIGHT MODE (OVERRIDES ONLY) ================= */
+/* ================= LIGHT MODE ================= */
 
 .student-layout.light .dash-card,
 .student-layout.light .latest-exam {
   background: #ffffff;
-  color: #0f172a;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.08);
 }
 
 .student-layout.light .dash-card span,
 .student-layout.light .progress-label,
 .student-layout.light .latest-exam p {
-  color: #6b7280;
+  color: #64748b;
 }
 
 .student-layout.light .dash-card strong {

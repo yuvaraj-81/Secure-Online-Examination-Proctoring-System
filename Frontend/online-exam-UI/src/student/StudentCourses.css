@@ -1,5 +1,5 @@
 /* =====================================================
-   STUDENT COURSES — ADMIN PARITY LAYER (FIXED)
+   STUDENT COURSES — PRODUCT-GRADE
 ===================================================== */
 
 /* Wrapper */
@@ -8,36 +8,42 @@
   margin-inline: auto;
 }
 
-/* ================= TITLE ================= */
+/* ================= HEADER ================= */
 
-.student-courses h3 {
-  font-size: 22px;
-  font-weight: 700;
+.courses-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 18px;
-  letter-spacing: -0.015em;
 }
 
-/* ================= COURSE LIST ================= */
+.student-courses h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* ================= LIST ================= */
 
 .student-courses .card-list {
-  margin-top: 14px;
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
-/* ================= COURSE CARD ================= */
+/* ================= ROW ================= */
 
 .student-courses .card-item {
   position: relative;
 
-  background: linear-gradient(
-    180deg,
-    rgba(15, 23, 42, 0.95),
-    rgba(2, 6, 23, 0.95)
-  );
+  background:
+    linear-gradient(
+      180deg,
+      rgba(15, 23, 42, 0.96),
+      rgba(2, 6, 23, 0.98)
+    );
 
-  border: 1px solid #1e293b;
+  border: 1px solid rgba(148, 163, 184, 0.14);
   border-radius: 16px;
   padding: 18px 22px;
 
@@ -45,32 +51,33 @@
   align-items: center;
   justify-content: space-between;
 
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.45);
 
   transition:
-    transform 0.2s ease,
-    box-shadow 0.25s ease,
-    border-color 0.2s ease;
+    transform 0.18s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
 }
 
-/* Admin-style left accent */
+/* Left accent — admin parity */
 .student-courses .card-item::before {
   content: "";
   position: absolute;
   left: 0;
-  top: 12%;
-  height: 76%;
-  width: 4px;
+  top: 14%;
+  height: 72%;
+  width: 3px;
   border-radius: 999px;
   background: transparent;
-  transition: background 0.25s ease;
+  transition: background 0.22s ease;
 }
 
-/* Hover presence */
 .student-courses .card-item:hover {
   transform: translateY(-2px);
-  border-color: rgba(99, 102, 241, 0.5);
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.6);
+  border-color: rgba(99, 102, 241, 0.45);
+  box-shadow:
+    0 18px 46px rgba(99, 102, 241, 0.28);
 }
 
 .student-courses .card-item:hover::before {
@@ -84,46 +91,48 @@
 /* ================= TEXT ================= */
 
 .student-courses .card-item strong {
-  font-size: 15px;
+  font-size: 0.95rem;
   font-weight: 600;
   letter-spacing: -0.01em;
-  color: inherit;
+  color: #f9fafb;
 }
 
 .student-courses .muted {
-  font-size: 13px;
+  font-size: 0.8rem;
   margin-top: 4px;
   color: #9ca3af;
 }
 
-/* ================= EMPTY STATE ================= */
+/* ================= EMPTY ================= */
 
 .student-courses .empty-state {
   margin-top: 48px;
   text-align: center;
+  font-size: 0.85rem;
   color: #9ca3af;
-  font-size: 14px;
 }
 
-/* ================= SKELETON ================= */
+/* ================= LOADING ================= */
 
 .student-courses .skeleton {
   border-radius: 14px;
 }
 
 /* =====================================================
-   ✅ LIGHT MODE — MATCH StudentLayout EXACTLY
+   LIGHT MODE — EXACT PARITY
 ===================================================== */
 
 .student-layout.light .student-courses .card-item {
   background: #ffffff;
   border: 1px solid #e5e7eb;
-  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 14px 32px rgba(0, 0, 0, 0.08);
 }
 
 .student-layout.light .student-courses .card-item:hover {
   border-color: #6366f1;
-  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.12);
+  box-shadow:
+    0 18px 44px rgba(0, 0, 0, 0.12);
 }
 
 .student-layout.light .student-courses .card-item::before {
@@ -156,7 +165,7 @@
 
 @media (max-width: 640px) {
   .student-courses h3 {
-    font-size: 20px;
+    font-size: 1.15rem;
   }
 
   .student-courses .card-item {
@@ -164,6 +173,6 @@
   }
 
   .student-courses .card-item strong {
-    font-size: 14px;
+    font-size: 0.9rem;
   }
 }

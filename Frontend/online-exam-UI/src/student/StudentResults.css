@@ -1,11 +1,11 @@
 /* =====================================================
-   RESULTS PAGE — ENTERPRISE EXAM UX (FIXED THEME SCOPE)
+   RESULTS PAGE — ENTERPRISE EXAM UX (FINAL POLISH)
 ===================================================== */
 
 /* ================= PAGE TITLE ================= */
 .student-main h3 {
   font-size: 22px;
-  font-weight: 700;
+  font-weight: 800;
   margin-bottom: 18px;
   letter-spacing: -0.02em;
 }
@@ -25,38 +25,40 @@
     rgba(2, 6, 23, 0.95)
   );
   border: 1px solid #1e293b;
-  border-radius: 16px;
-  padding: 20px;
+  border-radius: 18px;
+  padding: 22px;
   text-align: center;
 
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.55);
   transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
 .summary-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.65);
+  transform: translateY(-3px);
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.7);
 }
 
 .summary-card span {
-  font-size: 13px;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: #9ca3af;
 }
 
 .summary-card strong {
   display: block;
   margin-top: 10px;
-  font-size: 28px;
+  font-size: 30px;
   font-weight: 800;
 }
 
 /* Accent borders */
 .summary-card.success {
-  border-color: rgba(34, 197, 94, 0.5);
+  border-color: rgba(34, 197, 94, 0.55);
 }
 
 .summary-card.info {
-  border-color: rgba(37, 99, 235, 0.5);
+  border-color: rgba(37, 99, 235, 0.55);
 }
 
 /* ================= RESULTS GRID ================= */
@@ -74,16 +76,16 @@
     rgba(2, 6, 23, 0.96)
   );
   border: 1px solid #1e293b;
-  border-radius: 18px;
-  padding: 20px;
+  border-radius: 20px;
+  padding: 22px;
 
-  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.6);
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.6);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .result-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 20px 55px rgba(0, 0, 0, 0.7);
+  transform: translateY(-4px);
+  box-shadow: 0 26px 70px rgba(0, 0, 0, 0.75);
 }
 
 /* ================= RESULT HEADER ================= */
@@ -104,38 +106,43 @@
   padding: 6px 14px;
   border-radius: 999px;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 800;
+  letter-spacing: 0.04em;
 }
 
 .status.pass {
-  background: rgba(34, 197, 94, 0.2);
+  background: rgba(34, 197, 94, 0.22);
   color: #22c55e;
 }
 
 .status.fail {
-  background: rgba(239, 68, 68, 0.2);
+  background: rgba(239, 68, 68, 0.22);
   color: #ef4444;
 }
 
 /* ================= SCORE BAR ================= */
 .progress {
-  height: 8px;
+  height: 10px;
   background: #1e293b;
   border-radius: 999px;
   overflow: hidden;
-  margin: 10px 0;
+  margin: 12px 0;
 }
 
 .progress-bar {
   height: 100%;
+  border-radius: inherit;
+  transition: width 0.6s ease;
 }
 
 .progress-bar.pass {
   background: linear-gradient(90deg, #22c55e, #4ade80);
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.55);
 }
 
 .progress-bar.fail {
   background: linear-gradient(90deg, #ef4444, #f87171);
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.45);
 }
 
 /* ================= META ================= */
@@ -150,15 +157,15 @@
   display: flex;
   justify-content: space-between;
   gap: 12px;
-  margin-top: 16px;
+  margin-top: 18px;
 }
 
 .view-btn {
   background: #1e293b;
   border: 1px solid #334155;
   color: #e5e7eb;
-  padding: 10px 18px;
-  border-radius: 10px;
+  padding: 11px 18px;
+  border-radius: 12px;
   cursor: pointer;
   font-size: 13px;
   font-weight: 600;
@@ -269,26 +276,25 @@
 .review-options li.correct {
   background: rgba(34, 197, 94, 0.18);
   color: #22c55e;
-  box-shadow: inset 0 0 0 1px rgba(34, 197, 94, 0.4);
+  box-shadow: inset 0 0 0 1px rgba(34, 197, 94, 0.45);
   font-weight: 600;
 }
 
 /* Wrong */
 .review-options li.wrong {
-  background: transparent;
   color: #ef4444;
   font-weight: 500;
 }
 
 /* =====================================================
-   ✅ LIGHT MODE — FIXED & SCOPED
+   ✅ LIGHT MODE — FIXED VISIBILITY & PREMIUM FEEL
 ===================================================== */
 
 .student-layout.light .summary-card,
 .student-layout.light .result-card {
   background: #ffffff;
   border: 1px solid #e5e7eb;
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.1);
 }
 
 .student-layout.light .summary-card span,
@@ -300,8 +306,19 @@
   color: #0f172a;
 }
 
+/* 🔥 FIX: progress now clearly visible */
 .student-layout.light .progress {
   background: #e5e7eb;
+}
+
+.student-layout.light .progress-bar.pass {
+  background: linear-gradient(90deg, #16a34a, #22c55e);
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.45);
+}
+
+.student-layout.light .progress-bar.fail {
+  background: linear-gradient(90deg, #dc2626, #ef4444);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.35);
 }
 
 .student-layout.light .view-btn {

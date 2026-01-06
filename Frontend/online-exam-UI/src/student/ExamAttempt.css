@@ -21,15 +21,14 @@
   overflow-x: hidden;
 }
 
-/* ✅ LIGHT MODE — HARD OVERRIDE */
+/* ================= LIGHT MODE ================= */
 body.light .exam-shell {
   background: #f8fafc !important;
-  background-image: none !important;
   color: #0f172a;
 }
 
 /* =====================================================
-   ROW 1 — TITLE + CAMERA
+   TOP BAR — TITLE + CAMERA
 ===================================================== */
 
 .exam-top {
@@ -39,9 +38,9 @@ body.light .exam-shell {
   margin-bottom: 18px;
 }
 
-.exam-title {
+.exam-top h2 {
   font-size: 22px;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: -0.02em;
 }
 
@@ -57,15 +56,14 @@ body.light .exam-shell {
   overflow: hidden;
   background: #000;
   border: 2px solid #22c55e;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
 }
 
 .camera-proctor video {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
-
 
 .violation-badge {
   position: absolute;
@@ -75,7 +73,7 @@ body.light .exam-shell {
   color: #fff;
   font-size: 11px;
   font-weight: 800;
-  padding: 4px 8px;
+  padding: 4px 10px;
   border-radius: 999px;
 }
 
@@ -85,40 +83,33 @@ body.light .violation-badge {
 }
 
 /* =====================================================
-   ROW 2 — PROGRESS ONLY
+   PROGRESS BAR
 ===================================================== */
 
 .exam-progress {
-  height: 8px;
-  background: rgba(148, 163, 184, 0.2);
+  height: 10px;
+  background: rgba(148, 163, 184, 0.22);
   border-radius: 999px;
   overflow: hidden;
-  margin-bottom: 40px; /* breathing space */
+  margin-bottom: 40px;
 }
 
 .exam-progress-bar {
   height: 100%;
   background: linear-gradient(90deg, #22c55e, #4ade80);
+  transition: width 0.5s ease;
 }
 
 /* =====================================================
-   ROW 3 — PERFECT CENTERING
-===================================================== */
-
-.exam-center {
-  flex: 1; /* 🔑 THIS creates vertical centering */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* =====================================================
-   QUESTION CARD
+   QUESTION CARD — FORCE CENTERING
 ===================================================== */
 
 .question-card {
   width: 100%;
   max-width: 880px;
+
+  margin: 0 auto;              /* 🔥 CENTER FIX */
+  align-self: center;          /* 🔥 FLEX FIX */
 
   background: linear-gradient(
     180deg,
@@ -126,17 +117,32 @@ body.light .violation-badge {
     rgba(2, 6, 23, 0.97)
   );
 
-  border-radius: 20px;
-  padding: 28px;
+  border-radius: 22px;
+  padding: 32px;
 
   border: 1px solid rgba(148, 163, 184, 0.22);
-  box-shadow: 0 28px 64px rgba(0, 0, 0, 0.55);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6);
 }
 
+/* ================= LIGHT MODE CARD ================= */
 body.light .question-card {
   background: #ffffff;
   color: #0f172a;
-  border-color: rgba(99, 102, 241, 0.25);
+  border: 1px solid #c7d2fe;
+  box-shadow: 0 28px 60px rgba(99, 102, 241, 0.15);
+}
+
+/* =====================================================
+   QUESTION TEXT (FIXED — JSX USES <strong>)
+===================================================== */
+
+.question-card strong {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 22px;
+  line-height: 1.6;
+  color: inherit;
 }
 
 /* =====================================================
@@ -145,26 +151,56 @@ body.light .question-card {
 
 .question-card label {
   display: flex;
+  align-items: center;
   gap: 14px;
-  padding: 16px 18px;
-  margin-bottom: 10px;
-  border-radius: 14px;
+
+  padding: 18px 20px;
+  margin-bottom: 12px;
+
+  border-radius: 16px;
   cursor: pointer;
+
   background: rgba(148, 163, 184, 0.08);
-  transition: background 0.15s ease, border 0.15s ease;
+  border: 1px solid transparent;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.12s ease;
 }
+
+.question-card label:hover {
+  transform: translateY(-1px);
+}
+
+/* ================= SELECTED ================= */
 
 .question-card label.selected {
   background: rgba(37, 99, 235, 0.25);
-  border: 1px solid rgba(37, 99, 235, 0.6);
+  border-color: rgba(37, 99, 235, 0.6);
 }
 
+.question-card label.selected::after {
+  content: "✓";
+  margin-left: auto;
+  font-weight: 900;
+  color: #22c55e;
+}
+
+/* ================= LIGHT MODE OPTIONS ================= */
+
 body.light .question-card label {
-  background: #f1f5f9;
+  background: #f8fafc;
+  border-color: #e5e7eb;
+  color: #0f172a;
+}
+
+body.light .question-card label:hover {
+  background: #eef2ff;
 }
 
 body.light .question-card label.selected {
-  background: #eef2ff;
+  background: #e0e7ff;
   border-color: #6366f1;
 }
 
@@ -179,17 +215,26 @@ body.light .question-card label.selected {
 }
 
 .exam-footer button {
-  padding: 14px 32px;
+  padding: 14px 36px;
   border-radius: 999px;
   background: linear-gradient(135deg, #2563eb, #3b82f6);
   color: #fff;
   border: none;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
+  box-shadow: 0 16px 38px rgba(37, 99, 235, 0.45);
 }
 
-/* ===== MODAL BACKDROP ===== */
+.exam-footer button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =====================================================
+   MODAL + BLUR
+===================================================== */
+
 .exam-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -200,59 +245,16 @@ body.light .question-card label.selected {
   z-index: 9999;
 }
 
-/* ===== MODAL CARD ===== */
 .exam-modal-card {
   background: #ffffff;
   width: 420px;
   padding: 28px 32px;
-  border-radius: 16px;
+  border-radius: 18px;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
   text-align: center;
-  animation: popIn 0.25s ease;
 }
 
-.exam-modal-card h2 {
-  margin-bottom: 12px;
-  font-size: 22px;
-}
-
-.exam-modal-card p {
-  font-size: 14px;
-  color: #555;
-  margin-bottom: 24px;
-}
-
-/* ===== START BUTTON ===== */
-.start-exam-btn {
-  width: 100%;
-  padding: 12px;
-  font-size: 15px;
-  font-weight: 600;
-  background: #2563eb;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.start-exam-btn:hover {
-  background: #1e40af;
-}
-
-/* ===== BLUR BACKGROUND ===== */
 .exam-content.blurred {
   filter: blur(6px);
   pointer-events: none;
-}
-
-/* ===== ANIMATION ===== */
-@keyframes popIn {
-  from {
-    transform: scale(0.95);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
 }

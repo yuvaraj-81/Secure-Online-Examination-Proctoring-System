@@ -38,24 +38,11 @@ const RequireAuth = ({ children, role }) => {
 /* ================= APP ================= */
 
 function App() {
-  const role = localStorage.getItem("role");
-
   return (
     <BrowserRouter>
       <Routes>
-        {/* ================= ROOT REDIRECT ================= */}
-        <Route
-          path="/"
-          element={
-            role === "ADMIN" ? (
-              <Navigate to="/admin" replace />
-            ) : role === "STUDENT" ? (
-              <Navigate to="/student" replace />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        />
+        {/* ================= ROOT ================= */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
 
         {/* ================= AUTH ================= */}
         <Route path="/login" element={<Login />} />
@@ -63,7 +50,7 @@ function App() {
 
         {/* ================= STUDENT ================= */}
         <Route
-          path="/student"
+          path="/student/*"
           element={
             <RequireAuth role="STUDENT">
               <StudentLayout />
@@ -71,7 +58,7 @@ function App() {
           }
         />
 
-        {/* ================= EXAM ATTEMPT (FULLSCREEN) ================= */}
+        {/* ================= EXAM ATTEMPT ================= */}
         <Route
           path="/exam/attempt/:examId"
           element={
@@ -83,7 +70,7 @@ function App() {
 
         {/* ================= ADMIN ================= */}
         <Route
-          path="/admin"
+          path="/admin/*"
           element={
             <RequireAuth role="ADMIN">
               <AdminLayout />

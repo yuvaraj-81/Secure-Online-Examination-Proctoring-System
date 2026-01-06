@@ -1,8 +1,9 @@
-/* ================= ROOT ================= */
+/* ================= PAGE WRAPPER ================= */
 
 .admin-page {
   padding: 28px;
   max-width: 1100px;
+  margin: 0 auto;
 }
 
 /* ================= HEADER ================= */
@@ -17,9 +18,10 @@
 
 .students-header h2 {
   margin: 0;
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.015em;
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #f9fafb;
 }
 
 /* Back button */
@@ -27,28 +29,29 @@
   background: transparent;
   border: none;
   color: #6366f1;
+  font-size: 0.85rem;
   font-weight: 500;
   cursor: pointer;
-  font-size: 14px;
-  padding: 6px 8px;
-  border-radius: 8px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  transition: background 0.15s ease;
 }
 
 .back-btn:hover {
   background: rgba(99, 102, 241, 0.12);
 }
 
-/* ================= FORM CARD ================= */
+/* ================= QUESTION COMPOSER ================= */
 
 .question-form {
   background:
     linear-gradient(
       180deg,
       rgba(15, 23, 42, 0.96),
-      rgba(2, 6, 23, 0.96)
+      rgba(2, 6, 23, 0.98)
     );
-  border: 1px solid #1e293b;
-  border-radius: 20px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 18px;
   padding: 26px;
   margin-bottom: 40px;
 
@@ -57,10 +60,10 @@
   gap: 16px;
 
   box-shadow:
-    0 18px 60px rgba(0, 0, 0, 0.55);
+    0 18px 50px rgba(0, 0, 0, 0.55);
 }
 
-/* Full width fields */
+/* full-width fields */
 .question-form .full {
   grid-column: span 2;
 }
@@ -72,19 +75,20 @@
   background: #020617;
   border: 1px solid #1e293b;
   color: #e5e7eb;
-  padding: 13px 16px;
-  border-radius: 14px;
-  font-size: 14px;
+
+  padding: 12px 14px;
+  border-radius: 12px;
+
+  font-size: 0.9rem;
   outline: none;
 
   transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease;
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .question-form textarea {
-  min-height: 100px;
+  min-height: 96px;
   resize: vertical;
 }
 
@@ -96,8 +100,7 @@
 .question-form input:focus,
 .question-form textarea:focus {
   border-color: #6366f1;
-  background: #020617;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25);
 }
 
 /* ================= FORM ACTIONS ================= */
@@ -105,34 +108,37 @@
 .form-actions {
   grid-column: span 2;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  margin-top: 10px;
+  align-items: center;
+  margin-top: 6px;
 }
 
-/* ================= PRIMARY BUTTON ================= */
+/* ================= PRIMARY ================= */
 
 .primary {
   background: linear-gradient(135deg, #6366f1, #818cf8);
   border: none;
-  color: #fff;
-  font-weight: 600;
-  padding: 12px 36px;
+  color: #ffffff;
+
+  padding: 11px 34px;
   border-radius: 999px;
+
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+
   cursor: pointer;
 
   box-shadow:
-    0 12px 35px rgba(99, 102, 241, 0.55);
+    0 12px 32px rgba(99, 102, 241, 0.55);
 
   transition:
     transform 0.15s ease,
-    box-shadow 0.2s ease,
-    filter 0.2s ease;
+    box-shadow 0.2s ease;
 }
 
 .primary:hover {
   transform: translateY(-1px);
-  filter: brightness(1.05);
   box-shadow:
     0 18px 45px rgba(99, 102, 241, 0.7);
 }
@@ -143,27 +149,29 @@
   cursor: not-allowed;
 }
 
-/* ================= SECONDARY BUTTON ================= */
+/* ================= SECONDARY ================= */
 
 .secondary {
   background: transparent;
-  border: 1.5px dashed #6366f1;
-  color: #6366f1;
-  padding: 10px 22px;
+  border: 1px solid #334155;
+  color: #cbd5f5;
+
+  padding: 9px 18px;
   border-radius: 999px;
-  font-weight: 500;
+
+  font-size: 0.82rem;
   cursor: pointer;
 
   transition:
-    background 0.2s ease,
-    border-style 0.2s ease,
-    transform 0.15s ease;
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .secondary:hover {
   background: rgba(99, 102, 241, 0.12);
-  border-style: solid;
-  transform: translateY(-1px);
+  border-color: #6366f1;
+  color: #ffffff;
 }
 
 /* ================= QUESTION LIST ================= */
@@ -179,35 +187,36 @@
   background:
     linear-gradient(
       180deg,
-      rgba(15, 23, 42, 0.94),
-      rgba(2, 6, 23, 0.94)
+      rgba(15, 23, 42, 0.96),
+      rgba(2, 6, 23, 0.98)
     );
-  border: 1px solid #1e293b;
-  border-radius: 20px;
-  padding: 24px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 16px;
+  padding: 22px;
 
   box-shadow:
-    0 14px 45px rgba(0, 0, 0, 0.45);
+    0 12px 38px rgba(0, 0, 0, 0.45);
 
   transition:
-    transform 0.15s ease,
-    box-shadow 0.25s ease,
-    border-color 0.25s ease;
+    transform 0.18s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .question-card:hover {
   transform: translateY(-2px);
   border-color: rgba(99, 102, 241, 0.45);
   box-shadow:
-    0 22px 65px rgba(0, 0, 0, 0.6);
+    0 20px 55px rgba(99, 102, 241, 0.3);
 }
 
 .question-card strong {
   display: block;
-  font-size: 16px;
+  font-size: 0.95rem;
   font-weight: 600;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   line-height: 1.6;
+  color: #f9fafb;
 }
 
 /* ================= OPTIONS ================= */
@@ -215,28 +224,26 @@
 .question-card ul {
   list-style: none;
   padding: 0;
-  margin: 0 0 16px;
+  margin: 0 0 14px;
 }
 
 .question-card li {
-  padding: 10px 14px;
-  margin-bottom: 8px;
-  border-radius: 12px;
+  padding: 9px 12px;
+  margin-bottom: 6px;
+  border-radius: 10px;
   background: rgba(148, 163, 184, 0.07);
-  font-size: 14px;
+  font-size: 0.85rem;
+  color: #e5e7eb;
 }
 
-/* ================= CORRECT BADGE ================= */
+/* ================= CORRECT ================= */
 
 .correct {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-
-  padding: 6px 16px;
+  display: inline-block;
+  padding: 6px 14px;
   border-radius: 999px;
 
-  font-size: 13px;
+  font-size: 0.75rem;
   font-weight: 600;
 
   background: rgba(34, 197, 94, 0.18);
@@ -245,27 +252,31 @@
   box-shadow:
     inset 0 0 0 1px rgba(34, 197, 94, 0.4);
 
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 /* ================= DELETE ================= */
 
 .danger {
   background: transparent;
-  border: 1px solid #ef4444;
-  color: #ef4444;
-  padding: 8px 18px;
+  border: 1px solid rgba(239, 68, 68, 0.6);
+  color: #fca5a5;
+
+  padding: 8px 16px;
   border-radius: 999px;
+
+  font-size: 0.8rem;
   font-weight: 500;
+
   cursor: pointer;
 
   transition:
-    background 0.2s ease,
+    background 0.15s ease,
     transform 0.15s ease;
 }
 
 .danger:hover {
-  background: rgba(239, 68, 68, 0.14);
+  background: rgba(239, 68, 68, 0.15);
   transform: translateY(-1px);
 }
 
@@ -275,7 +286,7 @@
   position: fixed;
   inset: 0;
   background: rgba(2, 6, 23, 0.8);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(6px);
   z-index: 1000;
 
   display: flex;
@@ -290,27 +301,21 @@
       rgba(15, 23, 42, 0.97),
       rgba(2, 6, 23, 0.97)
     );
-  border: 1px solid #1e293b;
-  border-radius: 22px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 18px;
   padding: 26px;
+
   width: 100%;
   max-width: 460px;
 
   box-shadow:
-    0 25px 80px rgba(0, 0, 0, 0.65);
-
-  animation: modalFade 0.25s ease-out;
+    0 30px 80px rgba(0, 0, 0, 0.65);
 }
 
-@keyframes modalFade {
-  from {
-    opacity: 0;
-    transform: translateY(14px) scale(0.97);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
+.modal h3 {
+  margin-bottom: 14px;
+  font-size: 1.05rem;
+  font-weight: 700;
 }
 
 /* ================= MODAL ACTIONS ================= */
@@ -319,7 +324,7 @@
   display: flex;
   justify-content: flex-end;
   gap: 14px;
-  margin-top: 22px;
+  margin-top: 18px;
 }
 
 /* ================= RESPONSIVE ================= */
@@ -335,7 +340,7 @@
 
   .form-actions {
     flex-direction: column;
-    align-items: stretch;
+    gap: 10px;
   }
 
   .form-actions button {
@@ -368,6 +373,7 @@
 
 .admin.light .question-card li {
   background: #f3f4f6;
+  color: #111827;
 }
 
 .admin.light .correct {

@@ -16,67 +16,72 @@ const Signup = () => {
       alert("Signup successful. Please login.");
       navigate("/login");
     } catch (err) {
-  const msg =
-    err.response?.data || "Signup failed. Please try again.";
-  alert(msg);
-}
-
+      alert(err.response?.data || "Signup failed. Please try again.");
+    }
   };
 
   return (
     <div className="auth-page">
       <div className="auth-card">
         <div className="auth-card-inner">
-          <h2 className="auth-title">Create account</h2>
+          <h2 className="auth-title">Create Account</h2>
           <p className="auth-subtitle">
-            Join us today, it only takes a few seconds.
+            Secure access starts here.
           </p>
 
           <form className="auth-form" onSubmit={handleSubmit}>
-            {/* Name */}
-            <label className="auth-label">Name</label>
-            <div className="auth-input-wrapper">
-              <input
-                className="auth-input"
-                type="text"
-                placeholder="Your full name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
+            <div>
+              <label className="auth-label">Name</label>
+              <div className="auth-input-wrapper">
+                <input
+                  className="auth-input"
+                  type="text"
+                  placeholder="Your full name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </div>
             </div>
 
-            {/* Email */}
-            <label className="auth-label">Email</label>
-            <div className="auth-input-wrapper">
-              <input
-                className="auth-input"
-                type="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+            <div>
+              <label className="auth-label">Email</label>
+              <div className="auth-input-wrapper">
+                <input
+                  className="auth-input"
+                  type="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
             </div>
 
-            {/* Password */}
-            <label className="auth-label">Password</label>
-            <div className="auth-input-wrapper">
-              <input
-                className="auth-input"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+            <div>
+              <label className="auth-label">Password</label>
+              <div className="auth-input-wrapper">
+                <input
+                  className="auth-input"
+                  type="password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
             </div>
 
             <button className="auth-button" type="submit">
-              Sign up
+              Sign Up
             </button>
           </form>
 
           <div className="auth-switch">
             Already have an account?{" "}
-            <span onClick={() => navigate("/login")}>Sign in</span>
+            <span onClick={() => navigate("/login")}>
+              Sign in
+            </span>
           </div>
         </div>
       </div>

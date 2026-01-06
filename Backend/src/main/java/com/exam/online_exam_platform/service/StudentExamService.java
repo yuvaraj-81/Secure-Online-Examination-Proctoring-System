@@ -190,7 +190,14 @@ public class StudentExamService {
                 )
                 .orElse(null);
 
-        if (attempt == null || attempt.isExpired()) return;
+        if (attempt == null) return;
+
+        if (attempt.isExpired()) {
+            attempt.setStatus(AttemptStatus.TERMINATED);
+            attemptRepo.save(attempt);
+            return;
+        }
+
 
         attempt.setAnswersJson(answers);
         attempt.setViolations(violations);

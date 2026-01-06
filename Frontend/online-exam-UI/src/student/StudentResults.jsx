@@ -19,13 +19,12 @@ const StudentResults = () => {
   const [reviewData, setReviewData] = useState([]);
   const [reviewLoading, setReviewLoading] = useState(false);
 
-  /* ================= FETCH DATA ================= */
+  /* ================= FETCH ================= */
 
   useEffect(() => {
     Promise.all([getMyResults(), getResultSummary()])
       .then(([resultsRes, summaryRes]) => {
         const data = resultsRes.data || [];
-
         data.sort(
           (a, b) =>
             new Date(b.submittedAt) - new Date(a.submittedAt)
@@ -46,43 +45,35 @@ const StudentResults = () => {
   useEffect(() => {
     document.body.style.overflow =
       selectedResult || reviewResult ? "hidden" : "auto";
-
-    return () => {
-      document.body.style.overflow = "auto";
-    };
+    return () => (document.body.style.overflow = "auto");
   }, [selectedResult, reviewResult]);
 
-  /* ================= PDF DOWNLOAD ================= */
+  /* ================= PDF ================= */
 
-  const handleDownloadPdf = async (resultId) => {
+  const handleDownloadPdf = async (id) => {
     try {
-      const res = await downloadResultPdf(resultId);
-
+      const res = await downloadResultPdf(id);
       const blob = new Blob([res.data], {
         type: "application/pdf"
       });
-
       const url = window.URL.createObjectURL(blob);
 
       const a = document.createElement("a");
       a.href = url;
-      a.download = `result-${resultId}.pdf`;
-      document.body.appendChild(a);
+      a.download = `result-${id}.pdf`;
       a.click();
 
-      a.remove();
       window.URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error(err);
+    } catch {
       alert("Failed to download PDF");
     }
   };
 
-  if (loading) return <p>Loading results...</p>;
+  if (loading) return <p>Loading results…</p>;
 
   return (
     <div className="student-results">
-      <h3> My Results</h3>
+      <h3>My Results</h3>
 
       {/* ================= SUMMARY ================= */}
       {summary && (
@@ -107,12 +98,12 @@ const StudentResults = () => {
       {/* ================= EMPTY ================= */}
       {results.length === 0 && (
         <div className="empty-state">
-           No results yet
+          No results yet
           <p>Attempt an exam to see your performance.</p>
         </div>
       )}
 
-      {/* ================= RESULT CARDS ================= */}
+      {/* ================= RESULTS ================= */}
       <div className="results-grid">
         {results.map(r => {
           const score = r.score ?? 0;
@@ -122,58 +113,55 @@ const StudentResults = () => {
             <div key={r.id} className="result-card">
               <div className="result-header">
                 <strong>{r.examTitle}</strong>
-
                 <span className={`status ${passed ? "pass" : "fail"}`}>
                   {passed ? "PASS" : "FAIL"}
                 </span>
               </div>
 
-              <div className="result-body">
-                <div className="score">
-                  Score: <strong>{score}%</strong>
-                </div>
+              <div className="score-row">
+                <span>Score</span>
+                <strong>{score}%</strong>
+              </div>
 
-                <div className="progress">
-                  <div
-                    className={`progress-bar ${passed ? "pass" : "fail"}`}
-                    style={{ width: `${score}%` }}
-                  />
-                </div>
+              <div className="progress">
+                <div
+                  className={`progress-bar ${passed ? "pass" : "fail"}`}
+                  style={{ width: `${score}%` }}
+                />
+              </div>
 
-                <div className="meta">
-                  Violations: {r.violations}
-                </div>
+              <div className="meta">
+                Violations: {r.violations}
+              </div>
+              <div className="meta">
+                📅 {new Date(r.submittedAt).toLocaleDateString()}
+              </div>
 
-                <div className="meta">
-                  📅 {new Date(r.submittedAt).toLocaleDateString()}
-                </div>
+              <div className="result-actions">
+                <button
+                  className="view-btn"
+                  onClick={() => setSelectedResult(r)}
+                >
+                  View Summary
+                </button>
 
-                <div className="result-actions">
-                  <button
-                    className="view-btn"
-                    onClick={() => setSelectedResult(r)}
-                  >
-                    View Details
-                  </button>
-
-                  <button
-                    className="view-btn"
-                    onClick={async () => {
-                      setReviewResult(r);
-                      setReviewLoading(true);
-                      try {
-                        const res = await getResultReview(r.id);
-                        setReviewData(res.data || []);
-                      } catch {
-                        setReviewData([]);
-                      } finally {
-                        setReviewLoading(false);
-                      }
-                    }}
-                  >
-                    Show Result
-                  </button>
-                </div>
+                <button
+                  className="view-btn primary"
+                  onClick={async () => {
+                    setReviewResult(r);
+                    setReviewLoading(true);
+                    try {
+                      const res = await getResultReview(r.id);
+                      setReviewData(res.data || []);
+                    } catch {
+                      setReviewData([]);
+                    } finally {
+                      setReviewLoading(false);
+                    }
+                  }}
+                >
+                  Review Exam
+                </button>
               </div>
             </div>
           );
@@ -186,10 +174,7 @@ const StudentResults = () => {
           className="modal-overlay"
           onClick={() => setSelectedResult(null)}
         >
-          <div
-            className="modal"
-            onClick={e => e.stopPropagation()}
-          >
+          <div className="modal" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
               <h4>{selectedResult.examTitle}</h4>
               <button
@@ -201,39 +186,19 @@ const StudentResults = () => {
             </div>
 
             <div className="modal-body">
-              <p>
-                <strong>Status:</strong>{" "}
-                {selectedResult.score >= PASS_PERCENT ? "PASS" : "FAIL"}
-              </p>
-              <p>
-                <strong>Score:</strong> {selectedResult.score}%
-              </p>
-              <p>
-                <strong>Total Questions:</strong>{" "}
-                {selectedResult.totalQuestions}
-              </p>
-              <p>
-                <strong>Correct Answers:</strong>{" "}
-                {selectedResult.correctAnswers}
-              </p>
-              <p>
-                <strong>Violations:</strong>{" "}
-                {selectedResult.violations}
-              </p>
-              <p>
-                <strong>Submitted At:</strong>{" "}
-                {new Date(selectedResult.submittedAt).toLocaleString()}
-              </p>
+              <p><strong>Status:</strong> {selectedResult.score >= PASS_PERCENT ? "PASS" : "FAIL"}</p>
+              <p><strong>Score:</strong> {selectedResult.score}%</p>
+              <p><strong>Total Questions:</strong> {selectedResult.totalQuestions}</p>
+              <p><strong>Correct Answers:</strong> {selectedResult.correctAnswers}</p>
+              <p><strong>Violations:</strong> {selectedResult.violations}</p>
+              <p><strong>Submitted:</strong> {new Date(selectedResult.submittedAt).toLocaleString()}</p>
 
-              {/*  SINGLE SOURCE: PDF DOWNLOAD */}
-              <div style={{ marginTop: "18px", textAlign: "right" }}>
+              <div className="modal-actions">
                 <button
-                  className="view-btn"
-                  onClick={() =>
-                    handleDownloadPdf(selectedResult.id)
-                  }
+                  className="view-btn primary"
+                  onClick={() => handleDownloadPdf(selectedResult.id)}
                 >
-                  Download Result
+                  Download PDF
                 </button>
               </div>
             </div>
@@ -268,14 +233,12 @@ const StudentResults = () => {
             </div>
 
             <div className="modal-body review-body">
-              {reviewLoading && <p>Loading review...</p>}
+              {reviewLoading && <p>Loading review…</p>}
 
               {!reviewLoading &&
-                reviewData.map((q, index) => (
+                reviewData.map((q, i) => (
                   <div key={q.questionId} className="review-question">
-                    <strong>
-                      {index + 1}. {q.questionText}
-                    </strong>
+                    <strong>{i + 1}. {q.questionText}</strong>
 
                     <ul className="review-options">
                       {q.options.map(opt => {
@@ -284,13 +247,10 @@ const StudentResults = () => {
                         else if (
                           opt === q.selectedAnswer &&
                           q.selectedAnswer !== q.correctAnswer
-                        )
-                          cls = "wrong";
+                        ) cls = "wrong";
 
                         return (
-                          <li key={opt} className={cls}>
-                            {opt}
-                          </li>
+                          <li key={opt} className={cls}>{opt}</li>
                         );
                       })}
                     </ul>

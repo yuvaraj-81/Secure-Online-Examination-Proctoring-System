@@ -1,132 +1,142 @@
-/* ================= STUDENT LIST ITEM ================= */
+/* ================= PAGE WRAPPER ================= */
+
+.admin-page {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ================= HEADER ================= */
+
+.students-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.students-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #f9fafb;
+}
+
+/* ================= STUDENT ROW ================= */
 
 .student-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  padding: 18px 20px;
+  margin-bottom: 14px;
+
   background:
     linear-gradient(
       180deg,
-      rgba(15, 23, 42, 0.92),
-      rgba(2, 6, 23, 0.95)
+      rgba(15, 23, 42, 0.96),
+      rgba(2, 6, 23, 0.98)
     );
-  padding: 18px 20px;
-  border-radius: 16px;
-  margin-bottom: 16px;
 
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-
-  border: 1px solid rgba(148, 163, 184, 0.18);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 14px;
 
   box-shadow:
-    0 12px 35px rgba(0, 0, 0, 0.4);
+    0 10px 28px rgba(0, 0, 0, 0.45);
 
   transition:
-    transform 0.2s ease,
-    box-shadow 0.25s ease,
+    transform 0.18s ease,
+    box-shadow 0.2s ease,
     border-color 0.2s ease;
 }
 
 .student-item:hover {
-  transform: translateY(-3px);
-  border-color: rgba(99, 102, 241, 0.5);
+  transform: translateY(-2px);
+  border-color: rgba(99, 102, 241, 0.45);
   box-shadow:
-    0 20px 55px rgba(99, 102, 241, 0.35);
+    0 18px 44px rgba(99, 102, 241, 0.3);
 }
 
 /* ================= STUDENT INFO ================= */
 
 .student-info strong {
-  font-size: 15px;
+  display: block;
+  font-size: 0.95rem;
   font-weight: 600;
   letter-spacing: -0.01em;
+  color: #f9fafb;
 }
 
 .student-info p {
-  margin: 6px 0 0;
+  margin: 4px 0 0;
+  font-size: 0.82rem;
   color: #9ca3af;
-  font-size: 13px;
-  line-height: 1.4;
 }
 
-/* ================= ACTION ICONS ================= */
+/* ================= ACTIONS ================= */
 
 .student-actions {
   display: flex;
-  gap: 10px;
-  align-items: center;
+  gap: 8px;
 }
 
 .icon-btn {
-  background: transparent;
-  border: none;
-  color: #9ca3af;
+  all: unset;
   cursor: pointer;
-  font-size: 16px;
-  padding: 8px;
-  border-radius: 999px;
+
+  width: 34px;
+  height: 34px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
+  border-radius: 10px;
+  font-size: 15px;
+
+  color: #94a3b8;
+
   transition:
-    transform 0.15s ease,
-    color 0.2s ease,
-    background 0.2s ease;
+    background 0.18s ease,
+    color 0.18s ease,
+    transform 0.12s ease;
 }
 
 .icon-btn:hover {
   transform: translateY(-1px);
 }
 
-.icon-btn:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.35);
-}
-
-/* Edit */
 .icon-btn.edit:hover {
-  color: #6366f1;
   background: rgba(99, 102, 241, 0.18);
+  color: #c7d2fe;
 }
 
-/* Delete */
 .icon-btn.delete:hover {
-  color: #ef4444;
   background: rgba(239, 68, 68, 0.18);
+  color: #fecaca;
 }
 
-/* ================= HEADER ROW ================= */
-
-.students-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  margin-bottom: 24px;
-}
-
-.students-header h2 {
-  margin: 0;
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-
-/* ================= PRIMARY / SECONDARY BUTTONS ================= */
+/* ================= PRIMARY BUTTON ================= */
 
 .primary-btn {
   background: linear-gradient(135deg, #6366f1, #818cf8);
   color: #ffffff;
   border: none;
+
   padding: 10px 18px;
   border-radius: 999px;
+
+  font-size: 0.85rem;
   font-weight: 600;
+  letter-spacing: 0.04em;
+
   cursor: pointer;
 
   box-shadow:
-    0 10px 30px rgba(99, 102, 241, 0.45);
+    0 10px 28px rgba(99, 102, 241, 0.45);
 
   transition:
     transform 0.15s ease,
@@ -136,30 +146,35 @@
 .primary-btn:hover {
   transform: translateY(-2px);
   box-shadow:
-    0 16px 45px rgba(99, 102, 241, 0.6);
+    0 16px 44px rgba(99, 102, 241, 0.6);
 }
+
+/* ================= SECONDARY ================= */
 
 .secondary {
   background: transparent;
-  color: #cbd5f5;
   border: 1px solid #334155;
+  color: #cbd5f5;
+
   padding: 8px 16px;
   border-radius: 999px;
+
+  font-size: 0.82rem;
   cursor: pointer;
 
   transition:
-    color 0.2s ease,
-    border-color 0.2s ease,
-    background 0.2s ease;
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease;
 }
 
 .secondary:hover {
+  background: rgba(99, 102, 241, 0.12);
   border-color: #6366f1;
   color: #ffffff;
-  background: rgba(99, 102, 241, 0.12);
 }
 
-/* ================= MODAL OVERLAY ================= */
+/* ================= MODAL ================= */
 
 .modal-overlay {
   position: fixed;
@@ -171,20 +186,20 @@
   z-index: 1000;
 }
 
-/* ================= MODAL CARD (EXAM STYLE) ================= */
-
 .modal {
+  width: 420px;
+  max-width: 92%;
+
+  padding: 24px;
+
   background:
     linear-gradient(
       180deg,
       rgba(15, 23, 42, 0.98),
       rgba(2, 6, 23, 0.98)
     );
-  border-radius: 18px;
-  padding: 24px;
-  width: 420px;
-  max-width: 92%;
 
+  border-radius: 16px;
   border: 1px solid rgba(148, 163, 184, 0.2);
 
   box-shadow:
@@ -192,26 +207,29 @@
 }
 
 .modal h3 {
-  margin: 0 0 18px;
-  font-size: 18px;
-  font-weight: 600;
+  margin-bottom: 16px;
+  font-size: 1.05rem;
+  font-weight: 700;
 }
 
-/* ================= MODAL INPUTS ================= */
+/* ================= MODAL INPUT ================= */
 
 .modal input {
   width: 100%;
-  background: #020617;
-  border: 1px solid #1e293b;
-  color: #e5e7eb;
   padding: 11px 14px;
-  border-radius: 12px;
   margin-bottom: 14px;
-  outline: none;
-  font-size: 14px;
+
+  border-radius: 12px;
+  border: 1px solid #1e293b;
+
+  background: #020617;
+  color: #e5e7eb;
+
+  font-size: 0.9rem;
 }
 
 .modal input:focus {
+  outline: none;
   border-color: #6366f1;
   box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25);
 }
@@ -222,15 +240,14 @@
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 16px;
 }
 
-/* ================= ERROR TEXT ================= */
+/* ================= ERROR ================= */
 
 .error-text {
   color: #f87171;
-  margin-bottom: 10px;
-  font-size: 14px;
+  font-size: 0.9rem;
+  margin-bottom: 12px;
 }
 
 /* ================= RESPONSIVE ================= */
@@ -239,6 +256,7 @@
   .student-item {
     flex-direction: column;
     align-items: flex-start;
+    gap: 12px;
   }
 
   .student-actions {
@@ -248,26 +266,23 @@
   .students-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
   }
 }
 
-/* ================= LIGHT MODE SUPPORT ================= */
+/* ================= LIGHT MODE ================= */
 
 .admin.light .student-item {
-  background:
-    linear-gradient(
-      180deg,
-      #ffffff,
-      #f8fafc
-    );
+  background: #ffffff;
   border: 1px solid #e5e7eb;
-  box-shadow:
-    0 12px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+}
+
+.admin.light .student-info strong {
+  color: #0f172a;
 }
 
 .admin.light .student-info p {
-  color: #6b7280;
+  color: #64748b;
 }
 
 .admin.light .modal {
@@ -278,5 +293,5 @@
 .admin.light .modal input {
   background: #f9fafb;
   border: 1px solid #d1d5db;
-  color: #111827;
+  color: #0f172a;
 }

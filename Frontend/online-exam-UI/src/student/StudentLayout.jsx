@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import StudentDashboard from "./StudentDashboard";
 import StudentCourses from "./StudentCourses";
@@ -9,11 +9,28 @@ import StudentProfile from "./StudentProfile";
 
 import "./StudentLayout.css";
 
+const TABS = ["dashboard", "courses", "exams", "results", "profile"];
+
 const StudentLayout = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [activeTab, setActiveTab] = useState("dashboard");
   const [lightMode, setLightMode] = useState(false);
 
-  const navigate = useNavigate();
+  /* ===============================
+     SYNC TAB FROM URL ✅ FIX
+  =============================== */
+  useEffect(() => {
+    const path = location.pathname.replace("/student", "");
+    const tabFromUrl = path.split("/")[1];
+
+    if (TABS.includes(tabFromUrl)) {
+      setActiveTab(tabFromUrl);
+    } else {
+      setActiveTab("dashboard");
+    }
+  }, [location.pathname]);
 
   /* ===============================
      LOAD SAVED THEME
@@ -25,26 +42,27 @@ const StudentLayout = () => {
 
   /* ===============================
      APPLY THEME (BODY + HTML)
-     🔑 THIS FIXES FULLSCREEN ISSUE
   =============================== */
   useEffect(() => {
     const theme = lightMode ? "light" : "dark";
 
-    // clear old
     document.body.classList.remove("light", "dark");
     document.documentElement.classList.remove("light", "dark");
 
-    // apply new
     document.body.classList.add(theme);
     document.documentElement.classList.add(theme);
 
-    // persist
     localStorage.setItem("theme", theme);
   }, [lightMode]);
 
   const handleLogout = () => {
     localStorage.clear();
     navigate("/login");
+  };
+
+  const handleTabChange = tab => {
+    setActiveTab(tab);
+    navigate(tab === "dashboard" ? "/student" : `/student/${tab}`);
   };
 
   const renderTab = () => {
@@ -74,11 +92,11 @@ const StudentLayout = () => {
         </div>
 
         <nav className="menu">
-          {["dashboard", "courses", "exams", "results", "profile"].map(tab => (
+          {TABS.map(tab => (
             <button
               key={tab}
               className={activeTab === tab ? "active" : ""}
-              onClick={() => setActiveTab(tab)}
+              onClick={() => handleTabChange(tab)}
             >
               <span className="menu-label">
                 {tab.charAt(0).toUpperCase() + tab.slice(1)}

@@ -16,7 +16,7 @@ const StudentProfile = () => {
   }, []);
 
   if (error) return <p>{error}</p>;
-  if (!profile) return <p>Loading profile...</p>;
+  if (!profile) return <p>Loading profile…</p>;
 
   const {
     name = "—",
@@ -28,8 +28,15 @@ const StudentProfile = () => {
   return (
     <div className="student-profile">
       <div className="content-card profile-card">
-        <h3> Profile</h3>
+        {/* ================= HEADER ================= */}
+        <div className="profile-header">
+          <h3>Profile</h3>
+          <span className="profile-subtitle">
+            Account information
+          </span>
+        </div>
 
+        {/* ================= GRID ================= */}
         <div className="profile-grid">
           <div className="profile-item">
             <span className="label">Name</span>
@@ -43,7 +50,7 @@ const StudentProfile = () => {
 
           <div className="profile-item">
             <span className="label">Role</span>
-            <span className="value">{role}</span>
+            <span className="value role">{role}</span>
           </div>
 
           <div className="profile-item">
