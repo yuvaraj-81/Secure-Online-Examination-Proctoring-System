@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin/students")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "${frontend.url}")
 public class AdminStudentController {
 
     private final AdminStudentService studentService;
