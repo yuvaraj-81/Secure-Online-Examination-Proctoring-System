@@ -9,7 +9,6 @@ import "./ExamAttempt.css";
 
 const MAX_VIOLATIONS = 3;
 
-/* ================= DETERMINISTIC SHUFFLE ================= */
 const shuffleArray = (array, seed) => {
   const result = [...array];
   let currentIndex = result.length;
@@ -34,7 +33,6 @@ const ExamAttempt = () => {
   const { examId } = useParams();
   const navigate = useNavigate();
 
-  /* ================= STATE ================= */
   const [ready, setReady] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
@@ -46,43 +44,14 @@ const ExamAttempt = () => {
 
   const videoRef = useRef(null);
   const streamRef = useRef(null);
-  const timerRef = useRef(null);
   const submittedRef = useRef(false);
-
-  /* ================= OPTIONS ================= */
-  const buildOptions = useCallback(q => {
-    if (!q) return [];
-    return shuffleArray(
-      [q.optionA, q.optionB, q.optionC, q.optionD].filter(Boolean),
-      q.id
-    );
-  }, []);
-
-  const q = questions[currentIndex];
-  const options = buildOptions(q);
-
-  /* ================= RESET SELECTION ================= */
-  useEffect(() => {
-    setSelected(null);
-  }, [currentIndex]);
-
-  /* ================= START EXAM ================= */
-  const handleStartExam = async () => {
-    try {
-      await document.documentElement.requestFullscreen();
-      setReady(true);
-    } catch {
-      alert("Fullscreen permission is mandatory.");
-    }
-  };
+  const violationLockRef = useRef(false);
 
   /* ================= SAFE SUBMIT ================= */
   const safeSubmit = useCallback(
     async reason => {
       if (submittedRef.current) return;
       submittedRef.current = true;
-
-      clearInterval(timerRef.current);
 
       await saveExamProgress(examId, {
         answers: JSON.stringify(answers),
@@ -106,17 +75,43 @@ const ExamAttempt = () => {
     [examId, answers, violations, navigate]
   );
 
-  /* ================= VIOLATIONS ================= */
-  const addViolation = useCallback(() => {
-    setViolations(v => {
-      const next = v + 1;
-      if (next >= MAX_VIOLATIONS) {
-        alert("Exam terminated due to violations.");
-        safeSubmit("VIOLATION_LIMIT");
-      }
-      return next;
-    });
-  }, [safeSubmit]);
+  /* ================= VIOLATION HANDLER ================= */
+  const addViolation = useCallback(
+    reason => {
+      if (submittedRef.current || violationLockRef.current) return;
+
+      violationLockRef.current = true;
+      setTimeout(() => (violationLockRef.current = false), 800);
+
+      setViolations(v => {
+        const next = v + 1;
+
+        if (reason === "ESC") {
+          alert("Exam terminated (ESC pressed).");
+          safeSubmit("ESC_KEY");
+          return next;
+        }
+
+        if (next >= MAX_VIOLATIONS) {
+          alert("Exam terminated due to violations.");
+          safeSubmit("VIOLATION_LIMIT");
+        }
+
+        return next;
+      });
+    },
+    [safeSubmit]
+  );
+
+  /* ================= START ================= */
+  const handleStartExam = async () => {
+    try {
+      await document.documentElement.requestFullscreen();
+      setReady(true);
+    } catch {
+      alert("Fullscreen permission is mandatory.");
+    }
+  };
 
   /* ================= CAMERA ================= */
   useEffect(() => {
@@ -127,10 +122,8 @@ const ExamAttempt = () => {
       .then(stream => {
         streamRef.current = stream;
         videoRef.current.srcObject = stream;
-
-        stream.getVideoTracks()[0].onended = () => {
-          addViolation();
-        };
+        stream.getVideoTracks()[0].onended = () =>
+          addViolation("CAMERA_STOPPED");
       })
       .catch(() => {
         alert("Camera permission denied.");
@@ -142,45 +135,43 @@ const ExamAttempt = () => {
     };
   }, [ready, addViolation, safeSubmit]);
 
-  /* ================= ANTI COPY / PASTE ================= */
+  /* ================= TAB SWITCH / WINDOW BLUR ================= */
   useEffect(() => {
     if (!ready) return;
 
-    const block = e => e.preventDefault();
+    const onVisibilityChange = () => {
+      if (document.hidden) {
+        addViolation("TAB_SWITCH");
+      }
+    };
 
-    document.addEventListener("copy", block);
-    document.addEventListener("cut", block);
-    document.addEventListener("paste", block);
-    document.addEventListener("contextmenu", block);
+    const onBlur = () => {
+      addViolation("WINDOW_BLUR");
+    };
 
-    document.body.style.userSelect = "none";
-    document.body.style.webkitUserSelect = "none";
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    window.addEventListener("blur", onBlur);
 
     return () => {
-      document.removeEventListener("copy", block);
-      document.removeEventListener("cut", block);
-      document.removeEventListener("paste", block);
-      document.removeEventListener("contextmenu", block);
-
-      document.body.style.userSelect = "";
-      document.body.style.webkitUserSelect = "";
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      window.removeEventListener("blur", onBlur);
     };
-  }, [ready]);
+  }, [ready, addViolation]);
 
-  /* ================= ESC + FULLSCREEN VIOLATION ================= */
+  /* ================= ESC + FULLSCREEN ================= */
   useEffect(() => {
     if (!ready) return;
 
     const onKeyDown = e => {
       if (e.key === "Escape") {
         e.preventDefault();
-        addViolation();
+        addViolation("ESC");
       }
     };
 
     const onFullscreenChange = () => {
       if (!document.fullscreenElement) {
-        addViolation();
+        addViolation("EXIT_FULLSCREEN");
       }
     };
 
@@ -193,7 +184,7 @@ const ExamAttempt = () => {
     };
   }, [ready, addViolation]);
 
-  /* ================= LOAD EXAM ================= */
+  /* ================= LOAD ================= */
   useEffect(() => {
     startOrResumeExam(examId)
       .then(({ data }) => {
@@ -220,6 +211,14 @@ const ExamAttempt = () => {
     requestAnimationFrame(() => setAnimatedProgress(progressPercent));
   }, [progressPercent]);
 
+  const q = questions[currentIndex];
+  const options = q
+    ? shuffleArray(
+        [q.optionA, q.optionB, q.optionC, q.optionD].filter(Boolean),
+        q.id
+      )
+    : [];
+
   return (
     <div className="exam-shell">
       {!ready && (
@@ -237,7 +236,6 @@ const ExamAttempt = () => {
       <div className={`exam-content ${!ready ? "blurred" : ""}`}>
         <div className="exam-top">
           <h2>{examTitle}</h2>
-
           <div className="camera-proctor">
             <video ref={videoRef} autoPlay muted playsInline />
             <span className="violation-badge">
@@ -272,7 +270,6 @@ const ExamAttempt = () => {
             >
               <input
                 type="radio"
-                name={`question-${q?.id}`}
                 checked={selected === opt}
                 readOnly
               />
