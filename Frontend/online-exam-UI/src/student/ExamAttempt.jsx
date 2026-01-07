@@ -8,6 +8,7 @@ import "./ExamAttempt.css";
 
 const MAX_VIOLATIONS = 3;
 
+/* ================= SHUFFLE ================= */
 const shuffleArray = (array, seed) => {
   const result = [...array];
   let currentIndex = result.length;
@@ -45,6 +46,15 @@ const ExamAttempt = () => {
   const streamRef = useRef(null);
   const submittedRef = useRef(false);
   const violationLockRef = useRef(false);
+
+  /* ================= SYNC SELECTION (🔥 FIX) ================= */
+  useEffect(() => {
+    const q = questions[currentIndex];
+    if (!q) return;
+
+    // Restore previous answer OR reset selection
+    setSelected(answers[String(q.id)] ?? null);
+  }, [currentIndex, questions, answers]);
 
   /* ================= NORMAL SUBMIT ================= */
   const submitExamNormally = useCallback(async () => {
@@ -87,7 +97,7 @@ const ExamAttempt = () => {
 
   /* ================= VIOLATION ================= */
   const addViolation = useCallback(
-    reason => {
+    () => {
       if (submittedRef.current || violationLockRef.current) return;
 
       violationLockRef.current = true;
@@ -148,7 +158,7 @@ const ExamAttempt = () => {
       if (e.ctrlKey || e.metaKey) {
         if (["c", "v", "a", "x", "s", "p"].includes(key)) {
           e.preventDefault();
-          addViolation("CTRL_COMBO");
+          addViolation();
         }
       }
 
@@ -159,10 +169,10 @@ const ExamAttempt = () => {
     };
 
     const onVisibilityChange = () => {
-      if (document.hidden) addViolation("TAB_SWITCH");
+      if (document.hidden) addViolation();
     };
 
-    const onBlur = () => addViolation("WINDOW_BLUR");
+    const onBlur = () => addViolation();
 
     const onFullscreenChange = () => {
       if (!document.fullscreenElement) {
