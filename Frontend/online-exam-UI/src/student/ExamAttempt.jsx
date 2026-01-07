@@ -38,7 +38,7 @@ const ExamAttempt = () => {
   const [ready, setReady] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
-  const [selected, setSelected] = useState(null); // 🔥 LOCAL SELECTION
+  const [selected, setSelected] = useState(null);
   const [violations, setViolations] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [examTitle, setExamTitle] = useState("Exam");
@@ -61,12 +61,12 @@ const ExamAttempt = () => {
   const q = questions[currentIndex];
   const options = buildOptions(q);
 
-  /* ================= RESET SELECTION ON QUESTION CHANGE ================= */
+  /* ================= RESET SELECTION ================= */
   useEffect(() => {
     setSelected(null);
   }, [currentIndex]);
 
-  /* ================= USER ACTION ================= */
+  /* ================= START EXAM ================= */
   const handleStartExam = async () => {
     try {
       await document.documentElement.requestFullscreen();
@@ -75,6 +75,48 @@ const ExamAttempt = () => {
       alert("Fullscreen permission is mandatory.");
     }
   };
+
+  /* ================= SAFE SUBMIT ================= */
+  const safeSubmit = useCallback(
+    async reason => {
+      if (submittedRef.current) return;
+      submittedRef.current = true;
+
+      clearInterval(timerRef.current);
+
+      await saveExamProgress(examId, {
+        answers: JSON.stringify(answers),
+        violations
+      }).catch(() => {});
+
+      await submitExam(examId, {
+        reason,
+        answers: JSON.stringify(answers),
+        violations
+      }).catch(() => {});
+
+      streamRef.current?.getTracks().forEach(t => t.stop());
+
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch(() => {});
+      }
+
+      navigate("/student/exams", { replace: true });
+    },
+    [examId, answers, violations, navigate]
+  );
+
+  /* ================= VIOLATIONS ================= */
+  const addViolation = useCallback(() => {
+    setViolations(v => {
+      const next = v + 1;
+      if (next >= MAX_VIOLATIONS) {
+        alert("Exam terminated due to violations.");
+        safeSubmit("VIOLATION_LIMIT");
+      }
+      return next;
+    });
+  }, [safeSubmit]);
 
   /* ================= CAMERA ================= */
   useEffect(() => {
@@ -85,7 +127,10 @@ const ExamAttempt = () => {
       .then(stream => {
         streamRef.current = stream;
         videoRef.current.srcObject = stream;
-        stream.getVideoTracks()[0].onended = () => addViolation();
+
+        stream.getVideoTracks()[0].onended = () => {
+          addViolation();
+        };
       })
       .catch(() => {
         alert("Camera permission denied.");
@@ -95,7 +140,7 @@ const ExamAttempt = () => {
     return () => {
       streamRef.current?.getTracks().forEach(t => t.stop());
     };
-  }, [ready]);
+  }, [ready, addViolation, safeSubmit]);
 
   /* ================= ANTI COPY / PASTE ================= */
   useEffect(() => {
@@ -122,46 +167,31 @@ const ExamAttempt = () => {
     };
   }, [ready]);
 
-  /* ================= SAFE SUBMIT ================= */
-  const safeSubmit = useCallback(
-    async reason => {
-      if (submittedRef.current) return;
-      submittedRef.current = true;
+  /* ================= ESC + FULLSCREEN VIOLATION ================= */
+  useEffect(() => {
+    if (!ready) return;
 
-      clearInterval(timerRef.current);
-
-      await saveExamProgress(examId, {
-        answers: JSON.stringify(answers),
-        violations
-      }).catch(() => {});
-
-      await submitExam(examId, {
-        reason,
-        answers: JSON.stringify(answers),
-        violations
-      }).catch(() => {});
-
-      streamRef.current?.getTracks().forEach(t => t.stop());
-
-      document.fullscreenElement &&
-        document.exitFullscreen().catch(() => {});
-
-      navigate("/student/exams", { replace: true });
-    },
-    [examId, answers, violations, navigate]
-  );
-
-  /* ================= VIOLATIONS ================= */
-  const addViolation = useCallback(() => {
-    setViolations(v => {
-      const next = v + 1;
-      if (next >= MAX_VIOLATIONS) {
-        alert("Exam terminated due to violations.");
-        safeSubmit("VIOLATION_LIMIT");
+    const onKeyDown = e => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        addViolation();
       }
-      return next;
-    });
-  }, [safeSubmit]);
+    };
+
+    const onFullscreenChange = () => {
+      if (!document.fullscreenElement) {
+        addViolation();
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("fullscreenchange", onFullscreenChange);
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("fullscreenchange", onFullscreenChange);
+    };
+  }, [ready, addViolation]);
 
   /* ================= LOAD EXAM ================= */
   useEffect(() => {
@@ -253,7 +283,7 @@ const ExamAttempt = () => {
 
         <footer className="exam-footer">
           <button
-            disabled={!selected} // 🔒 ENABLE ONLY AFTER USER SELECTION
+            disabled={!selected}
             onClick={() =>
               currentIndex < questions.length - 1
                 ? setCurrentIndex(i => i + 1)
