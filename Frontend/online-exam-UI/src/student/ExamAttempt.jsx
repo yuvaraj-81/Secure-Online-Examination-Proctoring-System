@@ -2,8 +2,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   startOrResumeExam,
-  submitExam,
-  saveExamProgress
+  submitExam
 } from "../services/studentService";
 import "./ExamAttempt.css";
 
@@ -47,6 +46,24 @@ const ExamAttempt = () => {
   const submittedRef = useRef(false);
   const violationLockRef = useRef(false);
 
+  /* ================= NORMAL SUBMIT ================= */
+  const submitExamNormally = useCallback(async () => {
+    if (submittedRef.current) return;
+    submittedRef.current = true;
+
+    await submitExam(examId, {
+      reason: "MANUAL_SUBMIT",
+      answers: JSON.stringify(answers),
+      violations
+    }).catch(() => {});
+
+    streamRef.current?.getTracks().forEach(t => t.stop());
+    document.exitFullscreen?.().catch(() => {});
+
+    alert("Exam submitted successfully.");
+    navigate("/student/exams", { replace: true });
+  }, [examId, answers, violations, navigate]);
+
   /* ================= TERMINATE ================= */
   const terminateExam = useCallback(
     async reason => {
@@ -62,7 +79,7 @@ const ExamAttempt = () => {
       streamRef.current?.getTracks().forEach(t => t.stop());
       document.exitFullscreen?.().catch(() => {});
 
-      alert("Exam terminated.");
+      alert("Exam terminated due to rule violation.");
       navigate("/student/exams", { replace: true });
     },
     [examId, answers, violations, navigate]
@@ -116,20 +133,18 @@ const ExamAttempt = () => {
     };
   }, [ready, terminateExam]);
 
-  /* ================= GLOBAL SECURITY GUARD ================= */
+  /* ================= SECURITY GUARD ================= */
   useEffect(() => {
     if (!ready) return;
 
     const onKeyDown = e => {
       const key = e.key.toLowerCase();
 
-      // ESC → immediate termination
       if (key === "escape") {
         e.preventDefault();
         terminateExam("ESC_KEY");
       }
 
-      // Ctrl / Cmd combos
       if (e.ctrlKey || e.metaKey) {
         if (["c", "v", "a", "x", "s", "p"].includes(key)) {
           e.preventDefault();
@@ -137,7 +152,6 @@ const ExamAttempt = () => {
         }
       }
 
-      // DevTools (best-effort)
       if (key === "f12") {
         e.preventDefault();
         terminateExam("DEVTOOLS");
@@ -281,7 +295,7 @@ const ExamAttempt = () => {
             onClick={() =>
               currentIndex < questions.length - 1
                 ? setCurrentIndex(i => i + 1)
-                : terminateExam("MANUAL_SUBMIT")
+                : submitExamNormally()
             }
           >
             {currentIndex < questions.length - 1 ? "Next" : "Submit Exam"}
