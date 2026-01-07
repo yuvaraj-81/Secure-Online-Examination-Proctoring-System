@@ -45,7 +45,9 @@ public class StudentExamService {
 
         int totalExams = allExams.size();
         int attempted = results.size();
-        int passed = (int) results.stream().filter(r -> r.getScore() >= 40).count();
+        int passed = (int) results.stream()
+                .filter(r -> r.getScore() >= 40)
+                .count();
         int failed = attempted - passed;
 
         int averageScore = attempted == 0
@@ -64,8 +66,10 @@ public class StudentExamService {
         int upcoming = totalExams - attempted;
 
         StudentDashboardDTO.LatestExam latestExam = null;
-        Optional<Result> latestOpt = results.stream()
-                .max(Comparator.comparing(Result::getSubmittedAt));
+
+        Optional<Result> latestOpt =
+                results.stream()
+                        .max(Comparator.comparing(Result::getSubmittedAt));
 
         if (latestOpt.isPresent()) {
             Result r = latestOpt.get();
@@ -90,6 +94,7 @@ public class StudentExamService {
                 latestExam
         );
     }
+
 
     /* ================= EXAMS LIST ================= */
     public List<StudentExamDTO> getAllExamsForStudent(User student) {
@@ -134,12 +139,14 @@ public class StudentExamService {
             if (attempt.isExpired()) {
                 attempt.setStatus(AttemptStatus.TERMINATED);
                 attemptRepo.save(attempt);
+
                 return Map.of(
                         "status", AttemptStatus.TERMINATED,
                         "examId", exam.getId(),
                         "examTitle", exam.getTitle()
                 );
             }
+
         } else {
             attempt = new ExamAttempt();
             attempt.setStudent(student);
@@ -185,7 +192,10 @@ public class StudentExamService {
         }
 
         attempt.setAnswersJson(answers);
-        attempt.setViolations(Math.max(attempt.getViolations(), violations));
+        attempt.setViolations(
+                Math.max(attempt.getViolations(), violations)
+        );
+
         attemptRepo.save(attempt);
     }
 
@@ -203,13 +213,21 @@ public class StudentExamService {
         if (attempt.getStatus() != AttemptStatus.ACTIVE) return;
 
         attempt.setAnswersJson(answers);
-        attempt.setViolations(Math.max(attempt.getViolations(), violations));
-        attempt.setSubmissionReason(reason);
+        attempt.setViolations(
+                Math.max(attempt.getViolations(), violations)
+        );
+
+        // ✅ Preserve first termination reason
+        if (attempt.getSubmissionReason() == null) {
+            attempt.setSubmissionReason(reason);
+        }
+
         attempt.setStatus(
                 attempt.isExpired()
                         ? AttemptStatus.TERMINATED
                         : AttemptStatus.SUBMITTED
         );
+
         attemptRepo.save(attempt);
 
         if (resultRepo.existsByExamAttemptId(attempt.getId())) return;
@@ -243,8 +261,8 @@ public class StudentExamService {
         result.setCorrectAnswers(correct);
         result.setScore(score);
         result.setViolations(attempt.getViolations());
-        result.setSubmissionReason(reason);
-        result.setStatus("SUBMITTED");
+        result.setSubmissionReason(attempt.getSubmissionReason());
+        result.setStatus(attempt.getStatus().name());
         result.setSubmittedAt(LocalDateTime.now());
 
         resultRepo.save(result);

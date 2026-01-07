@@ -47,35 +47,28 @@ const ExamAttempt = () => {
   const submittedRef = useRef(false);
   const violationLockRef = useRef(false);
 
-  /* ================= SAFE SUBMIT ================= */
-  const safeSubmit = useCallback(
+  /* ================= TERMINATE ================= */
+  const terminateExam = useCallback(
     async reason => {
       if (submittedRef.current) return;
       submittedRef.current = true;
 
-      await saveExamProgress(examId, {
-        answers: JSON.stringify(answers),
-        violations
-      }).catch(() => {});
-
       await submitExam(examId, {
         reason,
         answers: JSON.stringify(answers),
-        violations
+        violations: violations + 1
       }).catch(() => {});
 
       streamRef.current?.getTracks().forEach(t => t.stop());
+      document.exitFullscreen?.().catch(() => {});
 
-      if (document.fullscreenElement) {
-        document.exitFullscreen().catch(() => {});
-      }
-
+      alert("Exam terminated.");
       navigate("/student/exams", { replace: true });
     },
     [examId, answers, violations, navigate]
   );
 
-  /* ================= VIOLATION HANDLER ================= */
+  /* ================= VIOLATION ================= */
   const addViolation = useCallback(
     reason => {
       if (submittedRef.current || violationLockRef.current) return;
@@ -85,22 +78,13 @@ const ExamAttempt = () => {
 
       setViolations(v => {
         const next = v + 1;
-
-        if (reason === "ESC") {
-          alert("Exam terminated (ESC pressed).");
-          safeSubmit("ESC_KEY");
-          return next;
-        }
-
         if (next >= MAX_VIOLATIONS) {
-          alert("Exam terminated due to violations.");
-          safeSubmit("VIOLATION_LIMIT");
+          terminateExam("VIOLATION_LIMIT");
         }
-
         return next;
       });
     },
-    [safeSubmit]
+    [terminateExam]
   );
 
   /* ================= START ================= */
@@ -123,68 +107,85 @@ const ExamAttempt = () => {
         streamRef.current = stream;
         videoRef.current.srcObject = stream;
         stream.getVideoTracks()[0].onended = () =>
-          addViolation("CAMERA_STOPPED");
+          terminateExam("CAMERA_STOPPED");
       })
-      .catch(() => {
-        alert("Camera permission denied.");
-        safeSubmit("CAMERA_DENIED");
-      });
+      .catch(() => terminateExam("CAMERA_DENIED"));
 
     return () => {
       streamRef.current?.getTracks().forEach(t => t.stop());
     };
-  }, [ready, addViolation, safeSubmit]);
+  }, [ready, terminateExam]);
 
-  /* ================= TAB SWITCH / WINDOW BLUR ================= */
-  useEffect(() => {
-    if (!ready) return;
-
-    const onVisibilityChange = () => {
-      if (document.hidden) {
-        addViolation("TAB_SWITCH");
-      }
-    };
-
-    const onBlur = () => {
-      addViolation("WINDOW_BLUR");
-    };
-
-    document.addEventListener("visibilitychange", onVisibilityChange);
-    window.addEventListener("blur", onBlur);
-
-    return () => {
-      document.removeEventListener("visibilitychange", onVisibilityChange);
-      window.removeEventListener("blur", onBlur);
-    };
-  }, [ready, addViolation]);
-
-  /* ================= ESC + FULLSCREEN ================= */
+  /* ================= GLOBAL SECURITY GUARD ================= */
   useEffect(() => {
     if (!ready) return;
 
     const onKeyDown = e => {
-      if (e.key === "Escape") {
+      const key = e.key.toLowerCase();
+
+      // ESC → immediate termination
+      if (key === "escape") {
         e.preventDefault();
-        addViolation("ESC");
+        terminateExam("ESC_KEY");
+      }
+
+      // Ctrl / Cmd combos
+      if (e.ctrlKey || e.metaKey) {
+        if (["c", "v", "a", "x", "s", "p"].includes(key)) {
+          e.preventDefault();
+          addViolation("CTRL_COMBO");
+        }
+      }
+
+      // DevTools (best-effort)
+      if (key === "f12") {
+        e.preventDefault();
+        terminateExam("DEVTOOLS");
       }
     };
+
+    const onVisibilityChange = () => {
+      if (document.hidden) addViolation("TAB_SWITCH");
+    };
+
+    const onBlur = () => addViolation("WINDOW_BLUR");
 
     const onFullscreenChange = () => {
       if (!document.fullscreenElement) {
-        addViolation("EXIT_FULLSCREEN");
+        terminateExam("EXIT_FULLSCREEN");
       }
     };
 
+    const block = e => e.preventDefault();
+
     document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    window.addEventListener("blur", onBlur);
     document.addEventListener("fullscreenchange", onFullscreenChange);
+
+    document.addEventListener("copy", block);
+    document.addEventListener("cut", block);
+    document.addEventListener("paste", block);
+    document.addEventListener("contextmenu", block);
+
+    document.body.style.userSelect = "none";
 
     return () => {
       document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      window.removeEventListener("blur", onBlur);
       document.removeEventListener("fullscreenchange", onFullscreenChange);
-    };
-  }, [ready, addViolation]);
 
-  /* ================= LOAD ================= */
+      document.removeEventListener("copy", block);
+      document.removeEventListener("cut", block);
+      document.removeEventListener("paste", block);
+      document.removeEventListener("contextmenu", block);
+
+      document.body.style.userSelect = "";
+    };
+  }, [ready, addViolation, terminateExam]);
+
+  /* ================= LOAD EXAM ================= */
   useEffect(() => {
     startOrResumeExam(examId)
       .then(({ data }) => {
@@ -268,11 +269,7 @@ const ExamAttempt = () => {
                 }));
               }}
             >
-              <input
-                type="radio"
-                checked={selected === opt}
-                readOnly
-              />
+              <input type="radio" checked={selected === opt} readOnly />
               {opt}
             </label>
           ))}
@@ -284,7 +281,7 @@ const ExamAttempt = () => {
             onClick={() =>
               currentIndex < questions.length - 1
                 ? setCurrentIndex(i => i + 1)
-                : safeSubmit("MANUAL_SUBMIT")
+                : terminateExam("MANUAL_SUBMIT")
             }
           >
             {currentIndex < questions.length - 1 ? "Next" : "Submit Exam"}
