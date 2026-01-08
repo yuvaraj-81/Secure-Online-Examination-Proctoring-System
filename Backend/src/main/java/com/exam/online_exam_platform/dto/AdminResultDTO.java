@@ -1,6 +1,6 @@
 package com.exam.online_exam_platform.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public class AdminResultDTO {
 
@@ -20,7 +20,9 @@ public class AdminResultDTO {
 
     private String status;
     private String submissionReason;
-    private LocalDateTime submittedAt;
+
+    // 🔥 FIX: use Instant (UTC)
+    private Instant submittedAt;
 
     public AdminResultDTO(
             Long resultId,
@@ -35,7 +37,7 @@ public class AdminResultDTO {
             int violations,
             String status,
             String submissionReason,
-            LocalDateTime submittedAt
+            Instant submittedAt
     ) {
         this.resultId = resultId;
         this.studentId = studentId;
@@ -52,7 +54,7 @@ public class AdminResultDTO {
         this.submittedAt = submittedAt;
     }
 
-    /* getters only (DTO = read-only) */
+    /* ===== getters ===== */
 
     public Long getResultId() { return resultId; }
     public Long getStudentId() { return studentId; }
@@ -66,5 +68,5 @@ public class AdminResultDTO {
     public int getViolations() { return violations; }
     public String getStatus() { return status; }
     public String getSubmissionReason() { return submissionReason; }
-    public LocalDateTime getSubmittedAt() { return submittedAt; }
+    public Instant getSubmittedAt() { return submittedAt; }
 }

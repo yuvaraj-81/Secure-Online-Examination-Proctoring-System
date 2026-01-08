@@ -1,13 +1,18 @@
 package com.exam.online_exam_platform.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public class ExamCreateDTO {
 
     private String title;
     private int durationMinutes;
-    private LocalDateTime startTime;
+
+    // 🔥 FIX: UTC-safe absolute time
+    private Instant startTime;
+
     private Long courseId;
+
+    /* ===== getters & setters ===== */
 
     public String getTitle() {
         return title;
@@ -25,11 +30,11 @@ public class ExamCreateDTO {
         this.durationMinutes = durationMinutes;
     }
 
-    public LocalDateTime getStartTime() {
+    public Instant getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
+    public void setStartTime(Instant startTime) {
         this.startTime = startTime;
     }
 

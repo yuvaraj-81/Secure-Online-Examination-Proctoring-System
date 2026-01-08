@@ -1,44 +1,71 @@
 import api from "./api";
 
-export const getStudentDashboard = () =>
-  api.get("/student/dashboard/summary");
+/* ================= TIME UTILS (🔥 FIX) ================= */
 
-export const getMyProfile = () => {
-  return api.get("/student/profile");
+export const formatIST = (isoString) => {
+  if (!isoString) return "";
+
+  return new Date(isoString).toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+    dateStyle: "medium",
+    timeStyle: "short"
+  });
 };
 
-export const getMyCourses = () => {
-  return api.get("/student/courses");
+/* ================= DASHBOARD ================= */
+
+export const getStudentDashboard = async () => {
+  const res = await api.get("/student/dashboard/summary");
+
+  // 🔥 FIX latest exam time
+  if (res.data?.latestExam?.submittedAt) {
+    res.data.latestExam.submittedAt = formatIST(
+      res.data.latestExam.submittedAt
+    );
+  }
+
+  return res;
 };
 
-export const getMyResults = () => {
-  return api.get("/student/results");
-};
+/* ================= PROFILE / COURSES ================= */
 
-export const getMyExams = () => {
-  return api.get("/student/exams");
-};
+export const getMyProfile = () => api.get("/student/profile");
+export const getMyCourses = () => api.get("/student/courses");
 
-export const startOrResumeExam = (examId) => {
-  return api.get(`/student/exams/${examId}/attempt`);
-};
+/* ================= RESULTS ================= */
 
-export const saveExamProgress = (examId, body) => {
-  return api.post(`/student/exams/${examId}/autosave`, body);
-};
+export const getMyResults = async () => {
+  const res = await api.get("/student/results");
 
-export const submitExam = (examId, body) => {
-  return api.post(`/student/exams/${examId}/submit`, body);
-};
+  // 🔥 FIX results list timestamps
+  res.data = res.data.map(r => ({
+    ...r,
+    submittedAt: formatIST(r.submittedAt)
+  }));
 
-export const getResultReview = (resultId) =>
-  api.get(`/student/results/${resultId}/review`);
+  return res;
+};
 
 export const getResultSummary = () =>
   api.get("/student/results/summary");
+
+export const getResultReview = (resultId) =>
+  api.get(`/student/results/${resultId}/review`);
 
 export const downloadResultPdf = (resultId) =>
   api.get(`/student/results/${resultId}/pdf`, {
     responseType: "blob"
   });
 
+/* ================= EXAMS ================= */
+
+export const getMyExams = () => api.get("/student/exams");
+
+export const startOrResumeExam = (examId) =>
+  api.get(`/student/exams/${examId}/attempt`);
+
+export const saveExamProgress = (examId, body) =>
+  api.post(`/student/exams/${examId}/autosave`, body);
+
+export const submitExam = (examId, body) =>
+  api.post(`/student/exams/${examId}/submit`, body);

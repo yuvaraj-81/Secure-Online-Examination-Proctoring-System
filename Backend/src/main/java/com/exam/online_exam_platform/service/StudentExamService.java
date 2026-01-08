@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -94,7 +93,6 @@ public class StudentExamService {
                 latestExam
         );
     }
-
 
     /* ================= EXAMS LIST ================= */
     public List<StudentExamDTO> getAllExamsForStudent(User student) {
@@ -192,10 +190,7 @@ public class StudentExamService {
         }
 
         attempt.setAnswersJson(answers);
-        attempt.setViolations(
-                Math.max(attempt.getViolations(), violations)
-        );
-
+        attempt.setViolations(Math.max(attempt.getViolations(), violations));
         attemptRepo.save(attempt);
     }
 
@@ -213,11 +208,8 @@ public class StudentExamService {
         if (attempt.getStatus() != AttemptStatus.ACTIVE) return;
 
         attempt.setAnswersJson(answers);
-        attempt.setViolations(
-                Math.max(attempt.getViolations(), violations)
-        );
+        attempt.setViolations(Math.max(attempt.getViolations(), violations));
 
-        // ✅ Preserve first termination reason
         if (attempt.getSubmissionReason() == null) {
             attempt.setSubmissionReason(reason);
         }
@@ -263,7 +255,9 @@ public class StudentExamService {
         result.setViolations(attempt.getViolations());
         result.setSubmissionReason(attempt.getSubmissionReason());
         result.setStatus(attempt.getStatus().name());
-        result.setSubmittedAt(LocalDateTime.now());
+
+        // ✅ FINAL FIX — UTC SAFE
+        result.setSubmittedAt(Instant.now());
 
         resultRepo.save(result);
     }

@@ -1,6 +1,6 @@
 package com.exam.online_exam_platform.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +14,7 @@ public class AdminDashboardOverviewDTO {
     private double averageScore;
     private double passRate;
 
+    // Maps may contain Instants (UTC)
     private List<Map<String, Object>> recentExams;
     private List<Map<String, Object>> topStudents;
     private List<Map<String, Object>> atRiskStudents;

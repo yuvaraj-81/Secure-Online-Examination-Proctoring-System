@@ -5,9 +5,13 @@ import com.lowagie.text.*;
 import com.lowagie.text.pdf.PdfWriter;
 
 import java.io.ByteArrayOutputStream;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 public class ResultPdfGenerator {
+
+    private static final DateTimeFormatter FORMATTER =
+            DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm");
 
     public static byte[] generate(ResultPdfDTO data) {
 
@@ -32,12 +36,14 @@ public class ResultPdfGenerator {
 
             doc.add(new Paragraph("Exam Details", labelFont));
             doc.add(new Paragraph("Exam Title: " + data.getExamTitle(), valueFont));
-            doc.add(new Paragraph(
-                    "Submitted At: " +
-                            data.getSubmittedAt()
-                                    .format(DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm")),
-                    valueFont
-            ));
+
+            // ✅ FIX: Instant → ZonedDateTime → format
+            String submittedAt =
+                    data.getSubmittedAt()
+                            .atZone(ZoneId.of("Asia/Kolkata"))
+                            .format(FORMATTER);
+
+            doc.add(new Paragraph("Submitted At: " + submittedAt, valueFont));
             doc.add(new Paragraph("\n"));
 
             doc.add(new Paragraph("Result Summary", labelFont));

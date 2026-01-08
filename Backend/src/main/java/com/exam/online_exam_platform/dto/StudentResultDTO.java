@@ -1,6 +1,6 @@
 package com.exam.online_exam_platform.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public class StudentResultDTO {
 
@@ -14,7 +14,9 @@ public class StudentResultDTO {
     private int violations;
 
     private String status;
-    private LocalDateTime submittedAt;
+
+    // 🔥 FIX: use Instant (UTC)
+    private Instant submittedAt;
 
     /* ===== constructor ===== */
 
@@ -27,7 +29,7 @@ public class StudentResultDTO {
             int correctAnswers,
             int violations,
             String status,
-            LocalDateTime submittedAt
+            Instant submittedAt
     ) {
         this.id = id;
         this.examId = examId;
@@ -50,5 +52,6 @@ public class StudentResultDTO {
     public int getCorrectAnswers() { return correctAnswers; }
     public int getViolations() { return violations; }
     public String getStatus() { return status; }
-    public LocalDateTime getSubmittedAt() { return submittedAt; }
+
+    public Instant getSubmittedAt() { return submittedAt; }
 }

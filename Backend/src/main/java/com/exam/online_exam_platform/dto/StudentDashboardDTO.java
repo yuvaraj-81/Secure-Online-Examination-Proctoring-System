@@ -1,6 +1,6 @@
 package com.exam.online_exam_platform.dto;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public class StudentDashboardDTO {
 
@@ -19,7 +19,9 @@ public class StudentDashboardDTO {
         public String title;
         public int score;
         public String status;
-        public LocalDateTime submittedAt;
+
+        // 🔥 FIX: use Instant (UTC)
+        public Instant submittedAt;
     }
 
     /* ===== constructor ===== */
