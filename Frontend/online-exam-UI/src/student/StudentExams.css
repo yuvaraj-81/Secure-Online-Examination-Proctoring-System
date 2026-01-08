@@ -1,19 +1,19 @@
 /* =====================================================
-   STUDENT EXAMS — REFINED EXAM UX LAYER (FIXED)
+   STUDENT EXAMS — REFINED EXAM UX LAYER (FINAL)
 ===================================================== */
 
 .student-exams {
   max-width: 1040px;
   margin-inline: auto;
-  padding: 8px 12px;
+  padding: 12px 14px;
 }
 
 /* ================= TITLE ================= */
 
 .student-exams h3 {
-  font-size: 22px;
+  font-size: clamp(20px, 2.5vw, 22px);
   font-weight: 700;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
   letter-spacing: -0.015em;
 }
 
@@ -32,8 +32,8 @@
 
   background: linear-gradient(
     180deg,
-    rgba(15, 23, 42, 0.96),
-    rgba(2, 6, 23, 0.96)
+    rgba(15, 23, 42, 0.97),
+    rgba(2, 6, 23, 0.97)
   );
 
   border: 1px solid #1e293b;
@@ -48,14 +48,14 @@
     border-color 0.2s ease;
 }
 
-/* Left accent */
+/* Left accent — calmer, more premium */
 .student-exams .exam-card::before {
   content: "";
   position: absolute;
   left: 0;
-  top: 14%;
-  height: 72%;
-  width: 4px;
+  top: 16%;
+  height: 68%;
+  width: 3px;
   border-radius: 999px;
   background: transparent;
   transition: background 0.25s ease;
@@ -117,7 +117,7 @@
   border-radius: 12px;
 
   transition:
-    transform 0.15s ease,
+    transform 0.12s ease,
     box-shadow 0.15s ease,
     opacity 0.15s ease;
 }
@@ -128,6 +128,7 @@
 
 /* ================= BUTTON STATES ================= */
 
+/* Start */
 .student-exams .start-btn {
   background: linear-gradient(135deg, #2563eb, #3b82f6);
   box-shadow: 0 10px 26px rgba(37, 99, 235, 0.45);
@@ -137,6 +138,7 @@
   box-shadow: 0 14px 34px rgba(37, 99, 235, 0.6);
 }
 
+/* Resume */
 .student-exams .resume-btn {
   background: linear-gradient(135deg, #f59e0b, #fbbf24);
   color: #111827;
@@ -147,12 +149,13 @@
   box-shadow: 0 14px 34px rgba(245, 158, 11, 0.6);
 }
 
+/* Completed */
 .student-exams .completed-btn {
   background: linear-gradient(135deg, #16a34a, #22c55e);
   color: #ecfdf5;
   cursor: not-allowed;
   box-shadow: 0 8px 20px rgba(22, 163, 74, 0.35);
-  opacity: 0.95;
+  opacity: 0.92;
 }
 
 /* ================= EMPTY STATE ================= */
@@ -165,7 +168,7 @@
 }
 
 /* =====================================================
-   ✅ LIGHT MODE — CORRECT SCOPE
+   LIGHT MODE — CORRECT SCOPE
 ===================================================== */
 
 .student-layout.light .student-exams .exam-card {
@@ -203,7 +206,7 @@
 
 @media (max-width: 768px) {
   .student-exams {
-    padding: 8px;
+    padding: 10px;
   }
 
   .student-exams .exam-row {
@@ -224,7 +227,7 @@
 
 @media (max-width: 480px) {
   .student-exams h3 {
-    font-size: 20px;
+    font-size: 19px;
   }
 
   .student-exams .exam-card {
