@@ -16,11 +16,11 @@ const formatDateTime = (iso) => {
   return new Date(iso).toLocaleString("en-IN", {
     year: "numeric",
     month: "short",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",   // ✅ seconds preserved
-    hour12: false
+    // day: "2-digit",
+    // hour: "2-digit",
+    // minute: "2-digit",
+    // second: "2-digit",   // ✅ seconds preserved
+    // hour12: false
   });
 };
 
