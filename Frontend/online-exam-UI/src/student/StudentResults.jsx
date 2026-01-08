@@ -9,6 +9,21 @@ import "./StudentResults.css";
 
 const PASS_PERCENT = 40;
 
+/* ================= TIME FORMAT FIX ================= */
+const formatDateTimeWithSeconds = (iso) => {
+  if (!iso) return "-";
+
+  return new Date(iso).toLocaleString("en-IN", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit", // ✅ REAL SECONDS
+    hour12: false
+  });
+};
+
 const StudentResults = () => {
   const [results, setResults] = useState([]);
   const [summary, setSummary] = useState(null);
@@ -25,9 +40,9 @@ const StudentResults = () => {
     Promise.all([getMyResults(), getResultSummary()])
       .then(([resultsRes, summaryRes]) => {
         const data = resultsRes.data || [];
+
         data.sort(
-          (a, b) =>
-            new Date(b.submittedAt) - new Date(a.submittedAt)
+          (a, b) => new Date(b.submittedAt) - new Date(a.submittedAt)
         );
 
         setResults(data);
@@ -133,8 +148,9 @@ const StudentResults = () => {
               <div className="meta">
                 Violations: {r.violations}
               </div>
+
               <div className="meta">
-                📅 {new Date(r.submittedAt).toLocaleDateString()}
+                📅 {formatDateTimeWithSeconds(r.submittedAt)}
               </div>
 
               <div className="result-actions">
@@ -191,7 +207,10 @@ const StudentResults = () => {
               <p><strong>Total Questions:</strong> {selectedResult.totalQuestions}</p>
               <p><strong>Correct Answers:</strong> {selectedResult.correctAnswers}</p>
               <p><strong>Violations:</strong> {selectedResult.violations}</p>
-              <p><strong>Submitted:</strong> {new Date(selectedResult.submittedAt).toLocaleString()}</p>
+              <p>
+                <strong>Submitted:</strong>{" "}
+                {formatDateTimeWithSeconds(selectedResult.submittedAt)}
+              </p>
 
               <div className="modal-actions">
                 <button
