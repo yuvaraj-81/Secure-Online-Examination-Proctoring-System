@@ -18,31 +18,20 @@ const StudentLayout = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [lightMode, setLightMode] = useState(false);
 
-  /* ===============================
-     SYNC TAB FROM URL ✅ FIX
-  =============================== */
+  /* sync tab from URL */
   useEffect(() => {
     const path = location.pathname.replace("/student", "");
     const tabFromUrl = path.split("/")[1];
 
-    if (TABS.includes(tabFromUrl)) {
-      setActiveTab(tabFromUrl);
-    } else {
-      setActiveTab("dashboard");
-    }
+    setActiveTab(TABS.includes(tabFromUrl) ? tabFromUrl : "dashboard");
   }, [location.pathname]);
 
-  /* ===============================
-     LOAD SAVED THEME
-  =============================== */
+  /* load saved theme */
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    setLightMode(savedTheme === "light");
+    setLightMode(localStorage.getItem("theme") === "light");
   }, []);
 
-  /* ===============================
-     APPLY THEME (BODY + HTML)
-  =============================== */
+  /* apply theme */
   useEffect(() => {
     const theme = lightMode ? "light" : "dark";
 
@@ -88,7 +77,7 @@ const StudentLayout = () => {
       <aside className="student-sidebar">
         <div className="brand">
           <h2>🎓 Student</h2>
-          <span className="subtitle">Dashboard</span>
+          <span className="subtitle">Portal</span>
         </div>
 
         <nav className="menu">
@@ -98,9 +87,7 @@ const StudentLayout = () => {
               className={activeTab === tab ? "active" : ""}
               onClick={() => handleTabChange(tab)}
             >
-              <span className="menu-label">
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
-              </span>
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
             </button>
           ))}
         </nav>
@@ -113,27 +100,27 @@ const StudentLayout = () => {
       {/* MAIN */}
       <main className="student-main">
         <header className="student-header">
-          <h1 className="page-title">
-            {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
-          </h1>
-
-          <div className="header-row">
-            <span className="page-subtitle">
-              Track your progress and stay ahead
-            </span>
+          <div className="header-top">
+            <h1 className="page-title">
+              {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
+            </h1>
 
             <button
               className="theme-toggle"
               onClick={() => setLightMode(prev => !prev)}
             >
-              {lightMode ? "Dark Mode" : "Light Mode"}
+              {lightMode ? "🌙 Dark" : "☀️ Light"}
             </button>
           </div>
+
+          <p className="page-subtitle">
+            Track your progress and stay ahead
+          </p>
         </header>
 
-        <div className="content-card">
+        <section className="content-card">
           {renderTab()}
-        </div>
+        </section>
       </main>
     </div>
   );

@@ -8,8 +8,6 @@
   height: 100vh;
   overflow: hidden;
 
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-
   background: #020617;
   color: #e5e7eb;
 }
@@ -24,38 +22,26 @@
 
   display: flex;
   flex-direction: column;
-  padding: 22px 16px;
+  gap: 18px;
+  padding: 20px 14px;
 
-  background:
-    linear-gradient(180deg, #020617, #010314);
-
+  background: linear-gradient(180deg, #020617, #010314);
   border-right: 1px solid #1e293b;
-
-  box-shadow:
-    inset -1px 0 0 rgba(255,255,255,0.03);
-
-  z-index: 20;
 }
 
 /* =====================================================
    BRAND
 ===================================================== */
 
-.brand {
-  padding: 0 6px;
-  margin-bottom: 22px;
-}
-
 .brand h2 {
   font-size: 1.05rem;
   font-weight: 800;
-  letter-spacing: -0.02em;
 }
 
 .brand .subtitle {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   color: #94a3b8;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
@@ -64,7 +50,6 @@
 ===================================================== */
 
 .menu {
-  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -74,9 +59,6 @@
   all: unset;
   cursor: pointer;
 
-  display: flex;
-  align-items: center;
-
   padding: 11px 14px;
   border-radius: 12px;
 
@@ -84,30 +66,23 @@
   font-weight: 500;
   color: #94a3b8;
 
-  transition:
-    background 0.18s ease,
-    color 0.18s ease,
-    transform 0.12s ease;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.12s ease;
 }
 
 .menu button:hover {
   background: rgba(99, 102, 241, 0.14);
   color: #e0e7ff;
-  transform: translateX(2px);
 }
 
-/* active = same language as Admin */
 .menu button.active {
-  background:
-    linear-gradient(
-      90deg,
-      rgba(99, 102, 241, 0.35),
-      rgba(99, 102, 241, 0.08)
-    );
+  background: linear-gradient(
+    90deg,
+    rgba(99, 102, 241, 0.35),
+    rgba(99, 102, 241, 0.08)
+  );
   color: #ffffff;
   font-weight: 600;
-  box-shadow:
-    inset 3px 0 0 #6366f1;
+  box-shadow: inset 3px 0 0 #6366f1;
 }
 
 /* =====================================================
@@ -123,14 +98,9 @@
   border-radius: 12px;
 
   font-size: 0.85rem;
-  font-weight: 500;
   color: #fca5a5;
 
   cursor: pointer;
-
-  transition:
-    background 0.18s ease,
-    transform 0.12s ease;
 }
 
 .logout-btn:hover {
@@ -144,8 +114,7 @@
 .student-main {
   flex: 1;
   overflow-y: auto;
-
-  padding: 28px 30px 60px;
+  padding: 26px 28px 50px;
 
   background:
     radial-gradient(
@@ -164,21 +133,20 @@
   margin-bottom: 22px;
 }
 
-.page-title {
-  font-size: 1.5rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-}
-
-.header-row {
-  margin-top: 6px;
-
+.header-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 800;
 }
 
 .page-subtitle {
+  margin-top: 6px;
   font-size: 0.85rem;
   color: #94a3b8;
 }
@@ -188,25 +156,20 @@
 ===================================================== */
 
 .theme-toggle {
-  background: #020617;
-  border: 1px solid #334155;
-
-  padding: 7px 14px;
-  border-radius: 10px;
+  padding: 6px 14px;
+  border-radius: 999px;
 
   font-size: 0.75rem;
   font-weight: 600;
+
+  background: #020617;
+  border: 1px solid #334155;
   color: #e5e7eb;
 
   cursor: pointer;
-
-  transition:
-    background 0.18s ease,
-    border-color 0.18s ease;
 }
 
 .theme-toggle:hover {
-  background: #0b1220;
   border-color: #6366f1;
 }
 
@@ -215,22 +178,19 @@
 ===================================================== */
 
 .content-card {
-  background:
-    linear-gradient(
-      180deg,
-      rgba(15, 23, 42, 0.94),
-      rgba(2, 6, 23, 0.96)
-    );
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.95),
+    rgba(2, 6, 23, 0.97)
+  );
 
   border: 1px solid rgba(148, 163, 184, 0.16);
   border-radius: 18px;
-
   padding: 24px;
 
   min-height: calc(100vh - 170px);
 
-  box-shadow:
-    0 22px 60px rgba(0,0,0,0.45);
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.45);
 }
 
 /* =====================================================
@@ -245,22 +205,15 @@
 .student-layout.light .student-sidebar {
   background: #ffffff;
   border-right: 1px solid #e5e7eb;
-  box-shadow: none;
 }
 
 .student-layout.light .menu button {
   color: #334155;
 }
 
-.student-layout.light .menu button:hover {
-  background: rgba(99, 102, 241, 0.12);
-  color: #1e3a8a;
-}
-
 .student-layout.light .menu button.active {
   background: rgba(99, 102, 241, 0.16);
   color: #1e3a8a;
-  box-shadow: inset 3px 0 0 #6366f1;
 }
 
 .student-layout.light .student-main {
@@ -270,8 +223,7 @@
 .student-layout.light .content-card {
   background: #ffffff;
   border: 1px solid #e5e7eb;
-  box-shadow:
-    0 18px 40px rgba(0,0,0,0.08);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
 }
 
 .student-layout.light .page-subtitle {
@@ -284,12 +236,8 @@
   border: 1px solid #cbd5f5;
 }
 
-.student-layout.light .theme-toggle:hover {
-  background: #f1f5f9;
-}
-
 /* =====================================================
-   RESPONSIVE — EXAM SAFE
+   RESPONSIVE
 ===================================================== */
 
 @media (max-width: 900px) {
@@ -299,7 +247,7 @@
   }
 
   .student-main {
-    padding: 24px;
+    padding: 22px;
   }
 }
 
@@ -316,31 +264,21 @@
     padding: 14px;
   }
 
-  .brand {
-    margin-bottom: 0;
-    margin-right: 12px;
-  }
-
   .menu {
     flex-direction: row;
     gap: 6px;
     overflow-x: auto;
-    scrollbar-width: none;
-  }
-
-  .menu::-webkit-scrollbar {
-    display: none;
   }
 
   .menu button {
     white-space: nowrap;
-    padding: 9px 12px;
     font-size: 0.8rem;
+    padding: 9px 12px;
   }
 
   .logout-btn {
-    margin-top: 0;
     margin-left: auto;
+    margin-top: 0;
   }
 
   .student-main {
@@ -349,10 +287,9 @@
 }
 
 @media (max-width: 640px) {
-  .header-row {
+  .header-top {
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
   }
 
   .theme-toggle {
