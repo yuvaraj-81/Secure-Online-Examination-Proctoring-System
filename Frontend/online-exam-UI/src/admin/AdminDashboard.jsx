@@ -2,6 +2,16 @@ import { useEffect, useState } from "react";
 import { getDashboardOverview } from "../services/adminService";
 import "./AdminDashboard.css";
 
+/* ================= DATE FORMATTER (UTC → LOCAL) ================= */
+const formatDateTime = (iso) => {
+  if (!iso) return "-";
+
+  return new Date(iso).toLocaleString("en-IN", {
+    dateStyle: "medium",
+    timeStyle: "short"
+  });
+};
+
 const AdminDashboard = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -21,7 +31,6 @@ const AdminDashboard = () => {
           averageScore: res.data?.averageScore ?? 0,
           passRate: res.data?.passRate ?? 0,
 
-          // Future-proof sections
           recentExams: res.data?.recentExams ?? [],
           topStudents: res.data?.topStudents ?? [],
           atRiskStudents: res.data?.atRiskStudents ?? []
@@ -82,7 +91,7 @@ const AdminDashboard = () => {
               {data.recentExams.map((exam, idx) => (
                 <tr key={idx}>
                   <td>{exam.title}</td>
-                  <td>{exam.date}</td>
+                  <td>{formatDateTime(exam.date)}</td>
                   <td>{exam.participants}</td>
                 </tr>
               ))}
