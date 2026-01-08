@@ -8,7 +8,9 @@ import com.exam.online_exam_platform.entity.User;
 import com.exam.online_exam_platform.repository.*;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,19 +36,29 @@ public class AdminDashboardService {
 
     public AdminDashboardOverviewDTO getOverview() {
 
+        /* ================= TIME (UTC SAFE) ================= */
+
+        LocalDateTime nowUtc = LocalDateTime.now(ZoneOffset.UTC);
+
         /* ================= KPI ================= */
 
         long totalStudents = userRepository.countByRole(Role.STUDENT);
         long totalCourses = courseRepository.count();
         long totalExams = examRepository.count();
-        long upcomingExams = examRepository.countByStartTimeAfter(LocalDateTime.now());
-        long completedExams = examRepository.countByEndTimeBefore(LocalDateTime.now());
+
+        long upcomingExams =
+                examRepository.countByStartTimeAfter(nowUtc);
+
+        long completedExams =
+                examRepository.countByEndTimeBefore(nowUtc);
 
         double averageScore =
-                Optional.ofNullable(resultRepository.findAverageScore()).orElse(0.0);
+                Optional.ofNullable(resultRepository.findAverageScore())
+                        .orElse(0.0);
 
         double passRate =
-                Optional.ofNullable(resultRepository.findPassRate()).orElse(0.0);
+                Optional.ofNullable(resultRepository.findPassRate())
+                        .orElse(0.0);
 
         List<Result> allResults = resultRepository.findAll();
 
@@ -62,10 +74,11 @@ public class AdminDashboardService {
             Exam exam = examRepository.findById(entry.getKey()).orElse(null);
             if (exam == null) continue;
 
-            Result latest = entry.getValue().stream()
-                    .filter(r -> r.getSubmittedAt() != null)
-                    .max(Comparator.comparing(Result::getSubmittedAt))
-                    .orElse(null);
+            Result latest =
+                    entry.getValue().stream()
+                            .filter(r -> r.getSubmittedAt() != null)
+                            .max(Comparator.comparing(Result::getSubmittedAt))
+                            .orElse(null);
 
             Map<String, Object> map = new HashMap<>();
             map.put("title", exam.getTitle());
@@ -76,8 +89,8 @@ public class AdminDashboardService {
         }
 
         recentExams.sort((a, b) -> {
-            LocalDateTime d1 = (LocalDateTime) a.get("date");
-            LocalDateTime d2 = (LocalDateTime) b.get("date");
+            Instant d1 = (Instant) a.get("date");
+            Instant d2 = (Instant) b.get("date");
             if (d1 == null) return 1;
             if (d2 == null) return -1;
             return d2.compareTo(d1);
@@ -99,20 +112,22 @@ public class AdminDashboardService {
             User user = userRepository.findById(entry.getKey()).orElse(null);
             if (user == null) continue;
 
-            double avg =
-                    entry.getValue().stream()
-                            .mapToInt(Result::getScore)
-                            .average()
-                            .orElse(0);
+            long avgScore =
+                    Math.round(
+                            entry.getValue().stream()
+                                    .mapToInt(Result::getScore)
+                                    .average()
+                                    .orElse(0)
+                    );
 
             Map<String, Object> map = new HashMap<>();
             map.put("name", user.getName());
-            map.put("score", Math.round(avg)); // 🔑 ALWAYS Long
+            map.put("score", avgScore);
 
             studentAverages.add(map);
         }
 
-        /* ================= TOP 3 PERFORMERS (DESC) ================= */
+        /* ================= TOP STUDENTS ================= */
 
         List<Map<String, Object>> topStudents =
                 studentAverages.stream()
@@ -123,7 +138,7 @@ public class AdminDashboardService {
                         .limit(3)
                         .toList();
 
-        /* ================= AT-RISK STUDENTS (ASC, < 40) ================= */
+        /* ================= AT-RISK STUDENTS ================= */
 
         List<Map<String, Object>> atRiskStudents =
                 studentAverages.stream()
